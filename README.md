@@ -42,10 +42,24 @@ Open your browser and navigate to `http://localhost:5000`
 
 ## Usage
 
-### Sample User Account - You may create your own Account via Registration Form
+### Default Admin Account
+ - Username: admin
+ - Password: admin123
+
+### Sample User Account
 - Username: user
 - Password: user123
+> NOTE: You can also create your own User Account via Registration Form
 
+## API Documentation
+ 
+ The API endpoints are available at `/api/v1` and include:
+ 
+ - User endpoints: `/api/v1/users`
+ - Account endpoints: `/api/v1/accounts`
+ - Transaction endpoints: `/api/v1/transactions`
+ - Loan endpoints: `/api/v1/loans`
+ 
 For detailed API documentation, see the API section in the application.
 
 ## Project Structure
