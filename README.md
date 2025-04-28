@@ -42,11 +42,7 @@ Open your browser and navigate to `http://localhost:5000`
 
 ## Usage
 
-### Default Admin Account
-- Username: admin
-- Password: admin123
-
-### Sample User Account
+### Sample User Account - You may create your own Account via Registration Form
 - Username: user
 - Password: user123
 
