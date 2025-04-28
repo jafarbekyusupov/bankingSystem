@@ -108,6 +108,7 @@ BankingSystem/
 │   │   │   ├── dashboard.js
 │   │   │   ├── accounts.js
 │   │   │   ├── profile.js
+│   │   │   ├── admin.js
 │   │   │   ├── transactions.js
 │   │   │   ├── transfers.js
 │   │   │   ├── loans.js

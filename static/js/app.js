@@ -1,10 +1,10 @@
 /**
- * banking system main app
- * integrates ALL components & handles app flow
+ * Banking System Main Application
+ * Integrates all components and handles application flow
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // app stae
+    // App state
     const state = {
         currentPage: null,
         user: null,
@@ -13,17 +13,25 @@ document.addEventListener('DOMContentLoaded', () => {
         loans: []
     };
 
-    // initailize the app
+    // Initialize the application
     init();
 
+    /**
+     * Initialize the application
+     */
     function init() {
+        // Initialize event listeners
         initializeEventListeners();
 
+        // Check authentication status
         checkAuth();
     }
 
+    /**
+     * Initialize all event listeners
+     */
     function initializeEventListeners() {
-        // links
+        // Navigation links
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -32,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // auth form links
+        // Auth form links
         document.getElementById('show-register').addEventListener('click', (e) => {
             e.preventDefault();
             showAuthPage('register');
@@ -43,17 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
             showAuthPage('login');
         });
 
-        // logout btn
+        // Logout button
         document.getElementById('logout-btn').addEventListener('click', (e) => {
             e.preventDefault();
             logout();
         });
 
-        // auth forms
+        // Auth forms
         document.getElementById('login-form').addEventListener('submit', handleLogin);
         document.getElementById('register-form').addEventListener('submit', handleRegister);
 
-        // close modals when clicking outside
+        // Close modals when clicking outside
         window.addEventListener('click', (e) => {
             document.querySelectorAll('.modal').forEach(modal => {
                 if (e.target === modal) {
@@ -63,42 +71,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /** check auth status */
+    /**
+     * Check authentication status
+     */
     async function checkAuth() {
         if (api.isAuthenticated()) {
             try {
-                // get cur user profile
+                // Get current user profile
                 const userData = await api.getProfile();
                 state.user = userData;
 
+                // Show authenticated UI
                 showAuthenticatedUI();
 
+                // Load initial data
                 loadDashboard();
-            }
-            catch(error){ // in case token invalid or expired
+
+                // Initialize admin dashboard if user is admin
+                if (state.user.role === 'admin') {
+                    await adminComponent.initAdminDashboard(state.user);
+                }
+            } catch (error) {
+                // Token may be invalid or expired
                 logout();
             }
-        } else{ // show login page
+        } else {
+            // Show login page
             showAuthPage('login');
         }
     }
 
-    /** show authenticated UI */
+    /**
+     * Show authenticated UI
+     */
     function showAuthenticatedUI() {
         document.getElementById('auth-pages').style.display = 'none';
         document.getElementById('main-pages').style.display = 'block';
         document.getElementById('nav-authenticated').style.display = 'block';
 
-        // set username
+        // Set user name in UI
         document.getElementById('user-fullname').textContent = state.user.full_name;
 
-        // to dashboard by default
+        // Navigate to dashboard by default
         navigateTo('dashboard');
     }
 
     /**
-     * show partic-r auth page
-     * @param {string} page - auth page name ('login' or 'register')
+     * Show specific auth page
+     * @param {string} page - Auth page name ('login' or 'register')
      */
     function showAuthPage(page) {
         // Hide all pages
@@ -115,41 +135,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * to specific page
-     * @param {string} page - page name
+     * Navigate to specific page
+     * @param {string} page - Page name
      */
     function navigateTo(page) {
         // skip if already on this page
         if (state.currentPage === page) return;
 
-        state.currentPage = page;
+        // handle admin page SEPARATELY
+        if (page === 'admin') {
+            if (state.user && state.user.role === 'admin') {
+                state.currentPage = page;
+                adminComponent.showAdminDashboard();
+            } else {
+                // if not admin ==>> redirect to dashboard
+                navigateTo('dashboard');
+                return;
+            }
+        } else {
+            state.currentPage = page;
 
-        // hide all pages
-        document.querySelectorAll('#main-pages .page').forEach(p => {
-            p.classList.remove('active');
-        });
+            // hide all pages
+            document.querySelectorAll('#main-pages .page').forEach(p => {
+                p.classList.remove('active');
+            });
 
-        // show specified page
-        document.getElementById(`${page}-page`).classList.add('active');
+            // show specified page
+            document.getElementById(`${page}-page`).classList.add('active');
+        }
 
         // remove active class from nav links
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.remove('active');
         });
 
-        // add active class to cur nav link
+        // add active class to current nav link
         const activeLink = document.querySelector(`.nav-link[data-page="${page}"]`);
         if (activeLink) {
             activeLink.classList.add('active');
         }
 
-        // load data for page
         loadPageData(page);
     }
 
     /**
-     * load data for specific page
-     * @param {string} page - paeg name
+     * Load data for specific page
+     * @param {string} page - Page name
      */
     async function loadPageData(page) {
         switch (page) {
@@ -171,27 +202,30 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'profile':
                 loadProfile();
                 break;
+            case 'admin':
+                // Admin data is loaded by adminComponent
+                break;
         }
     }
 
     /**
-     * load dashboard data
+     * Load dashboard data
      */
     async function loadDashboard() {
         try {
-            // load accs
+            // Load accounts
             const accountsData = await api.getAccounts();
             state.accounts = accountsData.accounts || [];
 
-            // load transacs
+            // Load transactions
             const transactionsData = await api.getUserTransactions();
             state.transactions = transactionsData.transactions || [];
 
-            // load loans
+            // Load loans
             const loansData = await api.getLoans();
             state.loans = loansData.loans || [];
 
-            // upd dashboard component
+            // Update dashboard component
             dashboardComponent.init(state.user);
             dashboardComponent.updateDashboard(state.accounts, state.transactions, state.loans);
         } catch (error) {
@@ -199,14 +233,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /** load accounts page data */
+    /**
+     * Load accounts page data
+     */
     async function loadAccounts() {
         try {
-            // load accs
+            // Load accounts
             const accountsData = await api.getAccounts();
             state.accounts = accountsData.accounts || [];
 
-            // upd accs
+            // Update accounts component
             accountsComponent.setAccounts(state.accounts);
         } catch (error) {
             console.error('Error loading accounts:', error);
@@ -214,66 +250,72 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * load transfers page data
+     * Load transfers page data
      */
     async function loadTransfers() {
         try {
-            // load acs if not already loaded
+            // Load accounts if not already loaded
             if (state.accounts.length === 0) {
                 const accountsData = await api.getAccounts();
                 state.accounts = accountsData.accounts || [];
             }
 
-            // upd transfers
+            // Update transfers component
             transfersComponent.setAccounts(state.accounts);
         } catch (error) {
             console.error('Error loading transfers:', error);
         }
     }
 
-    /** load transactions page data */
+    /**
+     * Load transactions page data
+     */
     async function loadTransactions() {
         try {
-            // load accounts if not already loaded
+            // Load accounts if not already loaded
             if (state.accounts.length === 0) {
                 const accountsData = await api.getAccounts();
                 state.accounts = accountsData.accounts || [];
             }
 
-            // load all user transactions
+            // Load all user transactions
             const transactionsData = await api.getUserTransactions();
             state.transactions = transactionsData.transactions || [];
 
-            // upd transactions component
+            // Update transactions component
             transactionsComponent.setData(state.transactions, state.accounts);
         } catch (error) {
             console.error('Error loading transactions:', error);
         }
     }
 
-    /** load loans page data */
+    /**
+     * Load loans page data
+     */
     async function loadLoans() {
         try {
-            // load loans
+            // Load loans
             const loansData = await api.getLoans();
             state.loans = loansData.loans || [];
 
-            // upd loans component
+            // Update loans component
             loansComponent.setLoans(state.loans);
         } catch (error) {
             console.error('Error loading loans:', error);
         }
     }
 
-    /** load profile page data */
+    /**
+     * Load profile page data
+     */
     function loadProfile() {
-        // upd profile component
+        // Update profile component
         profileComponent.setUserData(state.user);
     }
 
     /**
-     * handle login form submission
-     * @param {Event} e - form submit event
+     * Handle login form submission
+     * @param {Event} e - Form submit event
      */
     async function handleLogin(e) {
         e.preventDefault();
@@ -281,13 +323,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
 
-        try{
+        try {
             const result = await api.login(username, password);
 
             state.user = result.user;
             showAuthenticatedUI();
-        }
-        catch(error){
+
+            // Initialize admin dashboard if user is admin
+            if (state.user.role === 'admin') {
+                await adminComponent.initAdminDashboard(state.user);
+            }
+        } catch (error) {
             const errorElem = document.getElementById('login-error');
             errorElem.textContent = error.message || 'Invalid username or password';
             errorElem.style.display = 'block';
@@ -295,8 +341,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * handle register form submission
-     * @param {Event} e - form submit event
+     * Handle register form submission
+     * @param {Event} e - Form submit event
      */
     async function handleRegister(e) {
         e.preventDefault();
@@ -311,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             await api.register(userData);
 
-            // auto login after register
+            // Auto login after registration
             await api.login(userData.username, userData.password);
 
             const profileData = await api.getProfile();
@@ -325,9 +371,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * logout user
-     */
     function logout() {
         api.logout();
         state.user = null;
@@ -335,7 +378,12 @@ document.addEventListener('DOMContentLoaded', () => {
         state.transactions = [];
         state.loans = [];
 
-        // Show login page
+        // remove admin tab if exists -- so regular users cant see or access it
+        const adminNavItem = document.querySelector('.nav-link[data-page="admin"]');
+        if (adminNavItem) {
+            adminNavItem.parentNode.remove();
+        }
+
         document.getElementById('auth-pages').style.display = 'block';
         document.getElementById('main-pages').style.display = 'none';
         document.getElementById('nav-authenticated').style.display = 'none';

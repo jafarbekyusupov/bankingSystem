@@ -11,5 +11,18 @@
     "created_at": "2025-04-29T00:53:11.512367",
     "approved_at": null,
     "balance": 140000.0
+  },
+  {
+    "loan_id": "b759d0f7-a09b-4968-90b9-0e7639608d27",
+    "user_id": "09c2e11f-afc0-4119-85cf-b62f52850908",
+    "loan_type": "Auto",
+    "amount": 1100.0,
+    "interest_rate": 12.0,
+    "term_months": 12,
+    "purpose": "",
+    "status": "pending",
+    "created_at": "2025-04-29T02:07:47.897445",
+    "approved_at": null,
+    "balance": 1100.0
   }
 ]
