@@ -1,0 +1,47 @@
+[
+  {
+    "transaction_id": "42e79a8c-428f-444f-a9a6-56a807593570",
+    "account_id": "8a39317e-911f-491b-b209-e3d24fa3fc11",
+    "transaction_type": "deposit",
+    "amount": 1000.0,
+    "description": "Initial deposit",
+    "destination_account_id": null,
+    "created_at": "2025-04-29T00:15:07.793248"
+  },
+  {
+    "transaction_id": "7837db0c-927e-4080-ba25-9cf7c248cadb",
+    "account_id": "c4e7dece-023e-4559-b9ba-ca19b776faca",
+    "transaction_type": "deposit",
+    "amount": 5000.0,
+    "description": "Initial deposit",
+    "destination_account_id": null,
+    "created_at": "2025-04-29T00:15:07.795662"
+  },
+  {
+    "transaction_id": "8895ae9a-ddb4-4b9f-8442-e51b5083b90a",
+    "account_id": "7ebe74a4-33a8-47d3-ad57-35e83516be2c",
+    "transaction_type": "deposit",
+    "amount": 1000000000.0,
+    "description": "Initial deposit",
+    "destination_account_id": null,
+    "created_at": "2025-04-29T00:24:59.978673"
+  },
+  {
+    "transaction_id": "01311f90-f0e1-4d44-befa-5c03dc261670",
+    "account_id": "6f1a13a0-8805-430a-a564-144356f68954",
+    "transaction_type": "deposit",
+    "amount": 500.0,
+    "description": "Initial deposit",
+    "destination_account_id": null,
+    "created_at": "2025-04-29T00:25:12.040895"
+  },
+  {
+    "transaction_id": "f2813478-7ded-42ae-ab94-7405d7a6ae27",
+    "account_id": "7ebe74a4-33a8-47d3-ad57-35e83516be2c",
+    "transaction_type": "transfer",
+    "amount": 50000.0,
+    "description": "Transfer",
+    "destination_account_id": "6f1a13a0-8805-430a-a564-144356f68954",
+    "created_at": "2025-04-29T00:25:24.471153"
+  }
+]

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="container">
+                <div class="logo">
+                    <h1><i class="fas fa-university"></i> Banking System</h1>
+                </div>
+                <nav class="nav" id="nav-menu">
+                    <div id="nav-authenticated" style="display: none;">
+                        <ul class="nav-list">
+                            <li><a href="#" class="nav-link" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                            <li><a href="#" class="nav-link" data-page="accounts"><i class="fas fa-wallet"></i> Accounts</a></li>
+                            <li><a href="#" class="nav-link" data-page="transfers"><i class="fas fa-exchange-alt"></i> Transfers</a></li>
+                            <li><a href="#" class="nav-link" data-page="transactions"><i class="fas fa-history"></i> Transactions</a></li>
+                            <li><a href="#" class="nav-link" data-page="loans"><i class="fas fa-hand-holding-usd"></i> Loans</a></li>
+                            <li><a href="#" class="nav-link" data-page="profile"><i class="fas fa-user"></i> Profile</a></li>
+                            <li><a href="#" id="logout-btn" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- MAIN contents -->
+        <main class="main">
+            <div class="container">
+                <!-- auth pages -->
+                <section id="auth-pages">
+                    <!-- login page -->
+                    <div id="login-page" class="page active">
+                        <div class="auth-form">
+                            <h2>Login to Your Account</h2>
+                            <div id="login-error" class="error-message"></div>
+                            <form id="login-form">
+                                <div class="form-group">
+                                    <label for="login-username">Username</label>
+                                    <input type="text" id="login-username" name="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="login-password">Password</label>
+                                    <input type="password" id="login-password" name="password" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                </div>
+                                <div class="form-footer">
+                                    <p>Don't have an account? <a href="#" id="show-register">Register</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- register page -->
+                    <div id="register-page" class="page">
+                        <div class="auth-form">
+                            <h2>Create an Account</h2>
+                            <div id="register-error" class="error-message"></div>
+                            <form id="register-form">
+                                <div class="form-group">
+                                    <label for="register-username">Username</label>
+                                    <input type="text" id="register-username" name="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="register-password">Password</label>
+                                    <input type="password" id="register-password" name="password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="register-email">Email</label>
+                                    <input type="email" id="register-email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="register-fullname">Full Name</label>
+                                    <input type="text" id="register-fullname" name="full_name" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Register</button>
+                                </div>
+                                <div class="form-footer">
+                                    <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MAIN PAGES -- hidden til auth is complete -->
+                <section id="main-pages" style="display: none;">
+                    <!-- dashboard page -->
+                    <div id="dashboard-page" class="page active">
+                        <h2>Dashboard</h2>
+                        <div class="dashboard-greeting">
+                            <h3>Welcome, <span id="user-fullname"></span>!</h3>
+                        </div>
+                        <div class="dashboard-summary">
+                            <div class="summary-card">
+                                <div class="summary-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="summary-content">
+                                    <h4>Total Accounts</h4>
+                                    <p id="total-accounts">0</p>
+                                </div>
+                            </div>
+                            <div class="summary-card">
+                                <div class="summary-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="summary-content">
+                                    <h4>Total Balance</h4>
+                                    <p id="total-balance">$0.00</p>
+                                </div>
+                            </div>
+                            <div class="summary-card">
+                                <div class="summary-icon">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                                <div class="summary-content">
+                                    <h4>Active Loans</h4>
+                                    <p id="active-loans">0</p>
+                                </div>
+                            </div>
+                            <div class="summary-card">
+                                <div class="summary-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="summary-content">
+                                    <h4>Recent Transactions</h4>
+                                    <p id="recent-transactions">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-recent">
+                            <div class="recent-transactions">
+                                <h3>Recent Transactions</h3>
+                                <div id="dashboard-transactions" class="recent-list">
+                                    <div class="empty-state">No recent transactions</div>
+                                </div>
+                            </div>
+                            <div class="recent-accounts">
+                                <h3>Your Accounts</h3>
+                                <div id="dashboard-accounts" class="recent-list">
+                                    <div class="empty-state">No accounts found</div>
+                                </div>
+                                <div class="action-buttons">
+                                    <button id="new-account-btn" class="btn btn-primary"><i class="fas fa-plus"></i> New Account</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accounts Page -->
+                    <div id="accounts-page" class="page">
+                        <h2>Your Accounts</h2>
+                        <div class="action-buttons">
+                            <button id="accounts-new-account-btn" class="btn btn-primary"><i class="fas fa-plus"></i> New Account</button>
+                        </div>
+                        <div id="accounts-list" class="accounts-grid">
+                            <div class="empty-state">No accounts found</div>
+                        </div>
+                        <!-- Account Details Modal -->
+                        <div id="account-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h3>Account Details</h3>
+                                <div id="account-details">
+                                    <div class="account-info">
+                                        <p><strong>Account Number:</strong> <span id="modal-account-number"></span></p>
+                                        <p><strong>Type:</strong> <span id="modal-account-type"></span></p>
+                                        <p><strong>Balance:</strong> <span id="modal-account-balance"></span></p>
+                                        <p><strong>Created:</strong> <span id="modal-account-created"></span></p>
+                                    </div>
+                                    <div class="account-actions">
+                                        <button id="deposit-btn" class="btn btn-success"><i class="fas fa-plus"></i> Deposit</button>
+                                        <button id="withdraw-btn" class="btn btn-warning"><i class="fas fa-minus"></i> Withdraw</button>
+                                        <button id="close-account-btn" class="btn btn-danger"><i class="fas fa-times"></i> Close Account</button>
+                                    </div>
+                                    <div class="account-transactions">
+                                        <h4>Recent Transactions</h4>
+                                        <div id="modal-account-transactions">
+                                            <div class="empty-state">No transactions found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- New Account Modal -->
+                        <div id="new-account-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h3>Open New Account</h3>
+                                <div id="new-account-error" class="error-message"></div>
+                                <form id="new-account-form">
+                                    <div class="form-group">
+                                        <label for="account-type">Account Type</label>
+                                        <select id="account-type" name="account_type" required>
+                                            <option value="Checking">Checking</option>
+                                            <option value="Savings">Savings</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="initial-deposit">Initial Deposit</label>
+                                        <input type="number" id="initial-deposit" name="balance" min="0" step="0.01" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Create Account</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Deposit Modal -->
+                        <div id="deposit-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h3>Deposit Money</h3>
+                                <div id="deposit-error" class="error-message"></div>
+                                <form id="deposit-form">
+                                    <input type="hidden" id="deposit-account-id">
+                                    <div class="form-group">
+                                        <label for="deposit-amount">Amount</label>
+                                        <input type="number" id="deposit-amount" name="amount" min="0.01" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="deposit-description">Description (Optional)</label>
+                                        <input type="text" id="deposit-description" name="description">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success">Deposit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Withdraw Modal -->
+                        <div id="withdraw-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h3>Withdraw Money</h3>
+                                <div id="withdraw-error" class="error-message"></div>
+                                <form id="withdraw-form">
+                                    <input type="hidden" id="withdraw-account-id">
+                                    <div class="form-group">
+                                        <label for="withdraw-amount">Amount</label>
+                                        <input type="number" id="withdraw-amount" name="amount" min="0.01" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="withdraw-description">Description (Optional)</label>
+                                        <input type="text" id="withdraw-description" name="description">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-warning">Withdraw</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transfers Page -->
+                    <div id="transfers-page" class="page">
+                        <h2>Money Transfers</h2>
+                        <div id="transfer-error" class="error-message"></div>
+                        <form id="transfer-form" class="transfer-form">
+                            <div class="form-group">
+                                <label for="from-account">From Account</label>
+                                <select id="from-account" name="from_account_id" required>
+                                    <option value="">Select account</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="to-account">To Account</label>
+                                <select id="to-account" name="to_account_id" required>
+                                    <option value="">Select account</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="transfer-amount">Amount</label>
+                                <input type="number" id="transfer-amount" name="amount" min="0.01" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="transfer-description">Description (Optional)</label>
+                                <input type="text" id="transfer-description" name="description">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Transfer Money</button>
+                            </div>
+                        </form>
+                        <div class="transfer-details">
+                            <h3>Transfer Details</h3>
+                            <div id="from-account-details" class="account-preview">
+                                <h4>From Account</h4>
+                                <div id="from-account-info">
+                                    <div class="empty-state">Select an account</div>
+                                </div>
+                            </div>
+                            <div id="to-account-details" class="account-preview">
+                                <h4>To Account</h4>
+                                <div id="to-account-info">
+                                    <div class="empty-state">Select an account</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transactions Page -->
+                    <div id="transactions-page" class="page">
+                        <h2>Transaction History</h2>
+                        <div class="filter-controls">
+                            <div class="form-group">
+                                <label for="transaction-account">Account</label>
+                                <select id="transaction-account">
+                                    <option value="all">All Accounts</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction-type">Type</label>
+                                <select id="transaction-type">
+                                    <option value="all">All Types</option>
+                                    <option value="deposit">Deposits</option>
+                                    <option value="withdrawal">Withdrawals</option>
+                                    <option value="transfer">Transfers</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="transactions-list" id="transactions-list">
+                            <div class="empty-state">No transactions found</div>
+                        </div>
+                    </div>
+
+                    <!-- Loans Page -->
+                    <div id="loans-page" class="page">
+                        <h2>Loans</h2>
+                        <div class="action-buttons">
+                            <button id="new-loan-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Apply for Loan</button>
+                        </div>
+                        <div id="loans-list">
+                            <div class="empty-state">No loans found</div>
+                        </div>
+                        <!-- Loan Details Modal -->
+                        <div id="loan-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h3>Loan Details</h3>
+                                <div id="loan-details">
+                                    <div class="loan-info">
+                                        <p><strong>Loan Type:</strong> <span id="modal-loan-type"></span></p>
+                                        <p><strong>Amount:</strong> <span id="modal-loan-amount"></span></p>
+                                        <p><strong>Interest Rate:</strong> <span id="modal-loan-rate"></span>%</p>
+                                        <p><strong>Term:</strong> <span id="modal-loan-term"></span> months</p>
+                                        <p><strong>Status:</strong> <span id="modal-loan-status"></span></p>
+                                        <p><strong>Monthly Payment:</strong> <span id="modal-loan-payment"></span></p>
+                                        <p><strong>Remaining Balance:</strong> <span id="modal-loan-balance"></span></p>
+                                        <p><strong>Purpose:</strong> <span id="modal-loan-purpose"></span></p>
+                                    </div>
+                                    <div class="loan-actions" id="loan-actions">
+                                        <!-- dynam-lly populated based on loan status -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- New Loan Modal -->
+                        <div id="new-loan-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h3>Loan Application</h3>
+                                <div id="new-loan-error" class="error-message"></div>
+                                <form id="new-loan-form">
+                                    <div class="form-group">
+                                        <label for="loan-type">Loan Type</label>
+                                        <select id="loan-type" name="loan_type" required>
+                                            <option value="Personal">Personal Loan</option>
+                                            <option value="Home">Home Loan</option>
+                                            <option value="Auto">Auto Loan</option>
+                                            <option value="Education">Education Loan</option>
+                                            <option value="Business">Business Loan</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="loan-amount">Loan Amount</label>
+                                        <input type="number" id="loan-amount" name="amount" min="100" step="100" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="loan-term">Term (months)</label>
+                                        <input type="number" id="loan-term" name="term_months" min="6" max="360" step="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="loan-rate">Interest Rate (%)</label>
+                                        <input type="number" id="loan-rate" name="interest_rate" min="1" max="30" step="0.1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="loan-purpose">Purpose</label>
+                                        <textarea id="loan-purpose" name="purpose" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Loan Payment Modal -->
+                        <div id="payment-modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h3>Make Loan Payment</h3>
+                                <div id="payment-error" class="error-message"></div>
+                                <form id="payment-form">
+                                    <input type="hidden" id="payment-loan-id">
+                                    <div class="form-group">
+                                        <label for="payment-amount">Payment Amount</label>
+                                        <input type="number" id="payment-amount" name="amount" min="0.01" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success">Make Payment</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Page -->
+                    <div id="profile-page" class="page">
+                        <h2>Your Profile</h2>
+                        <div id="profile-error" class="error-message"></div>
+                        <form id="profile-form" class="profile-form">
+                            <div class="profile-section">
+                                <h3>Personal Information</h3>
+                                <div class="form-group">
+                                    <label for="profile-username">Username</label>
+                                    <input type="text" id="profile-username" name="username" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-fullname">Full Name</label>
+                                    <input type="text" id="profile-fullname" name="full_name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-email">Email</label>
+                                    <input type="email" id="profile-email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="profile-section">
+                                <h3>Change Password</h3>
+                                <div class="form-group">
+                                    <label for="profile-password">New Password</label>
+                                    <input type="password" id="profile-password" name="password">
+                                    <small>Leave blank to keep current password</small>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Update Profile</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2025 Banking System. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/components/dashboard.js"></script>
+    <script src="js/components/accounts.js"></script>
+    <script src="js/components/transactions.js"></script>
+    <script src="js/components/transfers.js"></script>
+    <script src="js/components/loans.js"></script>
+    <script src="js/components/profile.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+[
+  {
+    "user_id": "8d47fade-aeac-409d-9cc2-bc7213a52b54",
+    "username": "admin",
+    "password": "$2b$12$O3I9J1aRuBfe51u3aZx70uT2Jg.rDbKK8r.j1U66fpNTGD/Ah.Gz6",
+    "email": "admin@example.com",
+    "full_name": "Admin User",
+    "role": "admin",
+    "created_at": "2025-04-29T00:15:07.282479"
+  },
+  {
+    "user_id": "09c2e11f-afc0-4119-85cf-b62f52850908",
+    "username": "user",
+    "password": "$2b$12$6YIhm.QwWj7sPq.YJQkCQuU9TM7DctX/XzwNUTCKtUoTeplGA.BV6",
+    "email": "user@example.com",
+    "full_name": "Sample User",
+    "role": "user",
+    "created_at": "2025-04-29T00:15:07.537216"
+  },
+  {
+    "user_id": "15bb5c29-1536-4f19-81da-68a2cead90c1",
+    "username": "aaa",
+    "password": "$2b$12$73fJJDpH4KWs4fmWmrOhwuhUprVc2VirIR5Gt4HDvPxJYENP7cnuS",
+    "email": "aaa@gmail.com",
+    "full_name": "aaa",
+    "role": "user",
+    "created_at": "2025-04-29T00:23:18.727124"
+  },
+  {
+    "user_id": "e86b2198-32c1-458c-8135-69c674ff864e",
+    "username": "no",
+    "password": "$2b$12$z4WB9O2ZCYxYVhIvIsmakO8FBdDvjcLHO3Ed5ZdnUBpZI5wCO048q",
+    "email": "no@no.com",
+    "full_name": "noo",
+    "role": "user",
+    "created_at": "2025-04-29T01:44:20.788632"
+  }
+]

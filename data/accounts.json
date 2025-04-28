@@ -1,0 +1,38 @@
+[
+  {
+    "account_id": "8a39317e-911f-491b-b209-e3d24fa3fc11",
+    "user_id": "09c2e11f-afc0-4119-85cf-b62f52850908",
+    "account_type": "Checking",
+    "balance": 1000.0,
+    "account_number": "1000001",
+    "created_at": "2025-04-29T00:15:07.792149",
+    "active": true
+  },
+  {
+    "account_id": "c4e7dece-023e-4559-b9ba-ca19b776faca",
+    "user_id": "09c2e11f-afc0-4119-85cf-b62f52850908",
+    "account_type": "Savings",
+    "balance": 5000.0,
+    "account_number": "1000002",
+    "created_at": "2025-04-29T00:15:07.794344",
+    "active": true
+  },
+  {
+    "account_id": "7ebe74a4-33a8-47d3-ad57-35e83516be2c",
+    "user_id": "15bb5c29-1536-4f19-81da-68a2cead90c1",
+    "account_type": "Checking",
+    "balance": 999950000.0,
+    "account_number": "101208983",
+    "created_at": "2025-04-29T00:24:59.976874",
+    "active": true
+  },
+  {
+    "account_id": "6f1a13a0-8805-430a-a564-144356f68954",
+    "user_id": "15bb5c29-1536-4f19-81da-68a2cead90c1",
+    "account_type": "Savings",
+    "balance": 50500.0,
+    "account_number": "109514924",
+    "created_at": "2025-04-29T00:25:12.039396",
+    "active": true
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "loan_id": "71658e5c-5171-40ca-aa16-f274d42c7f2b",
+    "user_id": "15bb5c29-1536-4f19-81da-68a2cead90c1",
+    "loan_type": "Home",
+    "amount": 140000.0,
+    "interest_rate": 14.0,
+    "term_months": 36,
+    "purpose": "gambling",
+    "status": "pending",
+    "created_at": "2025-04-29T00:53:11.512367",
+    "approved_at": null,
+    "balance": 140000.0
+  }
+]
