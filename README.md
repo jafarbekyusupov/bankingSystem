@@ -50,15 +50,6 @@ Open your browser and navigate to `http://localhost:5000`
 - Username: user
 - Password: user123
 
-## API Documentation
-
-The API endpoints are available at `/api/v1` and include:
-
-- User endpoints: `/api/v1/users`
-- Account endpoints: `/api/v1/accounts`
-- Transaction endpoints: `/api/v1/transactions`
-- Loan endpoints: `/api/v1/loans`
-
 For detailed API documentation, see the API section in the application.
 
 ## Project Structure
