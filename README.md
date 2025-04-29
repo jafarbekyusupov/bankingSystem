@@ -2,6 +2,12 @@
 
 #### A full-stack banking application with a Python Flask backend and HTML / CSS / JavaScript frontend.
 
+## Demo Video
+
+[![Banking System Demo](https://img.youtube.com/vi/czdNo4DnRyc/0.jpg)](https://www.youtube.com/watch?v=czdNo4DnRyc)
+
+**Watch Demo:** [Mini Banking System Web App Video Demo | Full-Stack Python Flask & JS](https://www.youtube.com/watch?v=czdNo4DnRyc)
+
 ## Features
 
 - User authentication and account management
