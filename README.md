@@ -62,6 +62,13 @@ Open your browser and navigate to `http://localhost:5000`
  
 For detailed API documentation, see the API section in the application.
 
+## Security Features
+
+- Password hashing with bcrypt
+- JWT authentication for API requests
+- CSRF protection for web forms
+- Input validation and sanitization
+
 ## Project Structure
 
 The project follows a modular architecture with clear separation of concerns:
@@ -73,14 +80,7 @@ The project follows a modular architecture with clear separation of concerns:
 - `static/`: Web frontend (HTML, CSS, JavaScript)
 - `data/`: JSON data storage
 
-## Security Features
-
-- Password hashing with bcrypt
-- JWT authentication for API requests
-- CSRF protection for web forms
-- Input validation and sanitization
-
-## Project Structure
+## File Structure
 ```
 BankingSystem/
 ├── README.md                         # Project documentation
