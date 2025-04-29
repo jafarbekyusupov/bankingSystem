@@ -1,14 +1,14 @@
-# Banking System
+# 🏦 Banking System
 
 #### A full-stack banking application with a Python Flask backend and HTML / CSS / JavaScript frontend.
 
-## Demo Video
+## 🎬 Demo Video
 
 [![Banking System Demo](https://img.youtube.com/vi/czdNo4DnRyc/0.jpg)](https://www.youtube.com/watch?v=czdNo4DnRyc)
 
 **Watch Demo:** [Mini Banking System Web App Video Demo | Full-Stack Python Flask & JS](https://www.youtube.com/watch?v=czdNo4DnRyc)
 
-## Features
+## 📋 Features
 
 - User authentication and account management
 - Multiple account types (Checking, Savings)
@@ -18,46 +18,47 @@
 - RESTful API for all banking operations
 - Responsive web interface
 
-## Quick Start
+## 🚀 Quick Start
 
-### Prerequisites
+### 📄 Prerequisites
 
-- Python 3.8 or higher
-- pip (Python package manager)
+**• Python 3.8 or higher**
 
-### Installation
+**• pip (Python package manager)**
 
-1. Clone the repository:
+### ⚙️ Installation
+
+1. 📥 Clone the repository:
 ```
 git clone https://github.com/jafarbekyusupov/bankingSystem.git
 cd bankingSystem
 ```
 
-2. Install dependencies:
+2. 📦 Install dependencies:
 ```
 pip install -r requirements.txt
 ```
 
-3. Run the application:
+3. 🕹️ Run the application:
 ```
 python run.py
 ```
 
-4. Access the web application:
+4. 🌐 Access the web application:
 Open your browser and navigate to `http://localhost:5000`
 
-## Usage
+## 🔧 Usage
 
-### Default Admin Account
+### 👨🏻‍💻 Default Admin Account
  - Username: admin
  - Password: admin123
 
-### Sample User Account
+### 👤 Sample User Account
 - Username: user
 - Password: user123
 > NOTE: You can also create your own User Account via Registration Form
 
-## API Documentation
+## 📚 API Documentation
  
  The API endpoints are available at `/api/v1` and include:
  
@@ -68,14 +69,14 @@ Open your browser and navigate to `http://localhost:5000`
  
 For detailed API documentation, see the API section in the application.
 
-## Security Features
+## 🛡️ Security Features
 
 - Password hashing with bcrypt
 - JWT authentication for API requests
 - CSRF protection for web forms
 - Input validation and sanitization
 
-## Project Structure
+## 🏗️ Project Structure
 
 The project follows a modular architecture with clear separation of concerns:
 
@@ -86,7 +87,7 @@ The project follows a modular architecture with clear separation of concerns:
 - `static/`: Web frontend (HTML, CSS, JavaScript)
 - `data/`: JSON data storage
 
-## File Structure
+## 📜 File Structure
 ```
 BankingSystem/
 ├── README.md                         # Project documentation
