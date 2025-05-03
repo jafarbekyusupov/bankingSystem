@@ -43,5 +43,59 @@
     "account_number": "101565677",
     "created_at": "2025-04-29T02:05:52.662814",
     "active": true
+  },
+  {
+    "account_id": "ed8e6590-720b-4466-8016-b4c4762517fb",
+    "user_id": "a4fba23c-a362-4804-8a74-5386e13508cb",
+    "account_type": "Checking",
+    "balance": 129966000.0,
+    "account_number": "103877763",
+    "created_at": "2025-04-29T15:56:45.069761",
+    "active": true
+  },
+  {
+    "account_id": "3d45b254-cbce-42f7-81d5-b078973506ae",
+    "user_id": "a4fba23c-a362-4804-8a74-5386e13508cb",
+    "account_type": "Savings",
+    "balance": 1000033999.0,
+    "account_number": "102271112",
+    "created_at": "2025-04-29T15:56:54.152297",
+    "active": true
+  },
+  {
+    "account_id": "d14df74d-f630-4fe2-b518-fd9ac92b0e0c",
+    "user_id": "d6140a2c-4854-47af-baec-33dafef7aecf",
+    "account_type": "Checking",
+    "balance": 1188000000.0,
+    "account_number": "101444873",
+    "created_at": "2025-04-29T16:10:35.736759",
+    "active": true
+  },
+  {
+    "account_id": "5490538b-9ac3-4cc9-ae35-0ee3b476e855",
+    "user_id": "d6140a2c-4854-47af-baec-33dafef7aecf",
+    "account_type": "Savings",
+    "balance": 1044999999.0,
+    "account_number": "103189639",
+    "created_at": "2025-04-29T16:10:44.288576",
+    "active": true
+  },
+  {
+    "account_id": "e0b55eca-66fc-4d0a-91d4-f3dc4e0f44b0",
+    "user_id": "08698e7f-41ea-41eb-8339-3e376bdd2a20",
+    "account_type": "Checking",
+    "balance": 3399660000.0,
+    "account_number": "101121110",
+    "created_at": "2025-04-29T16:31:56.885876",
+    "active": true
+  },
+  {
+    "account_id": "efda3fed-86cf-4792-ae83-6e7251a872f3",
+    "user_id": "08698e7f-41ea-41eb-8339-3e376bdd2a20",
+    "account_type": "Savings",
+    "balance": 9240000.0,
+    "account_number": "103183281",
+    "created_at": "2025-04-29T16:32:07.437055",
+    "active": true
   }
 ]

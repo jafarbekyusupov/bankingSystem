@@ -7,9 +7,9 @@
     "interest_rate": 14.0,
     "term_months": 36,
     "purpose": "gambling",
-    "status": "pending",
+    "status": "active",
     "created_at": "2025-04-29T00:53:11.512367",
-    "approved_at": null,
+    "approved_at": "2025-04-29T08:37:39.884473",
     "balance": 140000.0
   },
   {
@@ -20,9 +20,48 @@
     "interest_rate": 12.0,
     "term_months": 12,
     "purpose": "",
-    "status": "pending",
+    "status": "active",
     "created_at": "2025-04-29T02:07:47.897445",
-    "approved_at": null,
+    "approved_at": "2025-04-29T08:38:05.449138",
     "balance": 1100.0
+  },
+  {
+    "loan_id": "d025015c-9ca0-4df7-bb86-3155fcfd858c",
+    "user_id": "a4fba23c-a362-4804-8a74-5386e13508cb",
+    "loan_type": "Education",
+    "amount": 50000.0,
+    "interest_rate": 12.0,
+    "term_months": 36,
+    "purpose": "gambling",
+    "status": "active",
+    "created_at": "2025-04-29T15:57:48.567979",
+    "approved_at": "2025-04-29T15:58:28.665418",
+    "balance": 50000.0
+  },
+  {
+    "loan_id": "938c167b-644f-4508-bfdd-925e8c3b7eb4",
+    "user_id": "d6140a2c-4854-47af-baec-33dafef7aecf",
+    "loan_type": "Education",
+    "amount": 900000.0,
+    "interest_rate": 24.0,
+    "term_months": 46,
+    "purpose": "college degree\n",
+    "status": "active",
+    "created_at": "2025-04-29T16:11:36.465487",
+    "approved_at": "2025-04-29T16:12:31.541590",
+    "balance": 9675.790000000154
+  },
+  {
+    "loan_id": "adc7531d-86d7-4b39-b7e5-879c5f7db875",
+    "user_id": "08698e7f-41ea-41eb-8339-3e376bdd2a20",
+    "loan_type": "Education",
+    "amount": 900000000.0,
+    "interest_rate": 30.0,
+    "term_months": 96,
+    "purpose": "college degree",
+    "status": "paid_off",
+    "created_at": "2025-04-29T16:33:06.406944",
+    "approved_at": "2025-04-29T16:33:53.030721",
+    "balance": 0
   }
 ]

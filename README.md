@@ -101,27 +101,27 @@ BankingSystem/
 │   │   ├── User.py                   # User class definition
 │   │   ├── Account.py                # Account class definition
 │   │   ├── Transaction.py            # Transaction class definition
-│   │   ├── Loan.py                   # Loan class definition
+│   │   └── Loan.py                   # Loan class definition
 │   ├── managers/                     # Manager classes
 │   │   ├── __init__.py
 │   │   ├── UserManager.py            # User management
 │   │   ├── AccountManager.py         # Account management
-│   │   ├── LoanManager.py            # Loan management
+│   │   └── LoanManager.py            # Loan management
 │   ├── utils/                        # Utility files
 │   │   ├── __init__.py
 │   │   ├── json_utils.py             # JSON serialization/deserialization
-│   │   ├── jwt_auth.py               # JWT authentication
+│   │   └── jwt_auth.py               # JWT authentication
 │   ├── api/                          # API server files
 │   │   ├── __init__.py
 │   │   ├── routes/                   # API endpoints
 │   │   │   ├── __init__.py
 │   │   │   ├── user_routes.py
 │   │   │   ├── account_routes.py
-│   │   │   ├── loan_routes.py
+│   └─  └─  └── loan_routes.py
 ├── static/                           # Web frontend
 │   ├── index.html                    # Main HTML file  
 │   ├── css/                          # Stylesheets
-│   │   ├── style.css
+│   │   └── style.css
 │   ├── js/                           # JavaScript files
 │   │   ├── app.js
 │   │   ├── api.js
@@ -132,15 +132,25 @@ BankingSystem/
 │   │   │   ├── admin.js
 │   │   │   ├── transactions.js
 │   │   │   ├── transfers.js
-│   │   │   ├── loans.js
+│   └─  └─  └── loans.js
 ├── data/                             # Data storage directory
 │   ├── users.json                    # User data
 │   ├── accounts.json                 # Account data
 │   ├── transactions.json             # Transaction records
-│   ├── loans.json                    # Loan data
+│   └── loans.json                    # Loan data
 ├── tests/                            # Test files
 │   ├── __init__.py
-│   ├── test_user.py
-│   ├── test_account.py
-│   ├── test_loan.py
+│   ├── test_core/
+│   │   ├── test_user.py
+│   │   ├── test_account.py
+│   │   ├── test_loan.py
+│   │   └── test_transaction.py
+│   ├── test_managers/
+│   │   ├── test_user_manager.py
+│   │   ├── test_account_manager.py
+│   │   └── test_loan_manager.py
+│   ├── test_routes/
+│   │   ├── test_user_routes.py
+│   │   ├── test_account_routes.py
+│   └─  └── test_loan_routes.py
 ```
