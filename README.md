@@ -140,6 +140,7 @@ BankingSystem/
 │   └── loans.json                    # Loan data
 ├── tests/                            # Test files
 │   ├── __init__.py
+│   ├── pytest.ini
 │   ├── test_core/
 │   │   ├── test_user.py
 │   │   ├── test_account.py
