@@ -1,4 +1,5 @@
 import pytest
+import bcrypt
 from src.core.User import User
 
 class TestUser:
