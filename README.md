@@ -139,7 +139,7 @@ BankingSystem/
 │   ├── transactions.json             # Transaction records
 │   └── loans.json                    # Loan data
 ├── tests/                            # Test files
-│   ├── __init__.py
+│   ├── conftest.py
 │   ├── pytest.ini
 │   ├── test_core/
 │   │   ├── test_user.py
