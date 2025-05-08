@@ -1,9 +1,6 @@
 import pytest
-import os
-import json
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 from src.managers.UserManager import UserManager
-from src.core.User import User
 
 class TestUserManager:
     @pytest.fixture #(autouse=True)
@@ -53,7 +50,7 @@ class TestUserManager:
         assert user.role == 'admin'
 
     @patch('src.utils.json_utils.load_json')
-    def test_gubid_id_not_found(self, mock_load_json, mock_data): # gubid - get User by ID
+    def test_get_user_by_id_not_found(self, mock_load_json, mock_data): # gubid - get User by ID
         ''' test cases when we tryna access non-existsent user by id '''
         mock_load_json.return_value = mock_data
 
