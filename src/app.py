@@ -44,7 +44,7 @@ def create_app():
     @app.errorhandler(404)
     def not_found(e):
         """Handle 404 errors"""
-        return render_template('404.html'), 404
+        return send_from_directory(app.static_folder, '404.html'), 404
 
     return app
 
