@@ -9,7 +9,7 @@ from flask_jwt_extended import JWTManager
 
 
 def create_app():
-    """create & config Flask app"""
+    """ Create & Config Flask app """
     app = Flask(__name__, static_folder='../static', static_url_path='')
 
     # configs
@@ -20,7 +20,7 @@ def create_app():
     # make sure data dir exists
     os.makedirs(app.config['DATA_FOLDER'], exist_ok=True)
 
-    # extensoin setup
+    # extension setup
     CORS(app)
     jwt = JWTManager(app)
 
@@ -33,24 +33,24 @@ def create_app():
     app.register_blueprint(account_bp, url_prefix='/api/v1/accounts')
     app.register_blueprint(loan_bp, url_prefix='/api/v1/loans')
 
-    # create init data files if dne
+    # create init data files if does not exist
     create_initial_data(app.config['DATA_FOLDER'])
 
     @app.route('/')
     def index():
-        """Serve the main index page"""
+        """ Serve the main index page """
         return send_from_directory(app.static_folder, 'index.html')
 
     @app.errorhandler(404)
     def not_found(e):
-        """Handle 404 errors"""
+        """ Handle 404 errors """
         return send_from_directory(app.static_folder, '404.html'), 404
 
     return app
 
 
 def create_initial_data(data_folder):
-    # create init data files if dne
+    # create init data files if do not exist
     data_files = ['users.json', 'accounts.json', 'transactions.json', 'loans.json']
 
     for file_name in data_files:
