@@ -12,6 +12,7 @@ class DashboardComponent {
     init(userData) {
         this.userData = userData;
         this.updateGreeting();
+        this.setupCardNavigation();
     }
 
     /**
@@ -57,6 +58,25 @@ class DashboardComponent {
         }).length;
 
         document.getElementById('recent-transactions').textContent = recentTransactions;
+    }
+
+    setupCardNavigation() {
+        const summaryCards = document.querySelectorAll('.summary-card.clickable');
+
+        // NEW FEAT -- clickable event listeners for each card on dashboard
+        summaryCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const section = card.getAttribute('data-section');
+                if (section) {
+                    this.navigateTo(section);
+                }
+            });
+        });
+    }
+
+    navigateTo(page) {
+        const navLink = document.querySelector(`.nav-link[data-page="${page}"]`);
+        if(navLink){ navLink.click();}
     }
 
     /** update recent transactions list */

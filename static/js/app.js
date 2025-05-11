@@ -28,6 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // NEW FEAT -- logo link to dashboard
+        const logoLink = document.querySelector('.logo .home-link');
+        if(logoLink){
+            logoLink.addEventListener('click', (e) => {
+                e.preventDefault(); navigateTo('dashboard');
+            });
+        }
+
         document.getElementById('show-register').addEventListener('click', (e) => {
             e.preventDefault();
             showAuthPage('register');

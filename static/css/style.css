@@ -630,3 +630,34 @@ h4 {
         margin-bottom: 0.5rem;
     }
 }
+
+.summary-card.clickable {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-card.clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card.clickable:active {
+    transform: translateY(-2px);
+}
+
+.logo .home-link {
+    color: var(--dark-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.logo .home-link:hover {
+    color: var(--primary-color);
+}
+
+.logo .home-link i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
