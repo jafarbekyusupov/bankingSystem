@@ -133,5 +133,23 @@
     "description": "money transfer from one account to another",
     "destination_account_id": "efda3fed-86cf-4792-ae83-6e7251a872f3",
     "created_at": "2025-04-29T16:32:25.299091"
+  },
+  {
+    "transaction_id": "bc25e189-fae8-4734-a2e0-fca428068008",
+    "account_id": "c4e7dece-023e-4559-b9ba-ca19b776faca",
+    "transaction_type": "withdrawal",
+    "amount": 97.73,
+    "description": "Payment  for Auto loan",
+    "destination_account_id": null,
+    "created_at": "2025-05-11T18:35:42.359346"
+  },
+  {
+    "transaction_id": "c9738f10-5cf1-4c96-bc1e-f2d1d95741e6",
+    "account_id": "c4e7dece-023e-4559-b9ba-ca19b776faca",
+    "transaction_type": "withdrawal",
+    "amount": 500.0,
+    "description": "Payment  for Auto loan",
+    "destination_account_id": null,
+    "created_at": "2025-05-11T18:36:09.335657"
   }
 ]

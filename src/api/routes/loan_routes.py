@@ -168,12 +168,33 @@ def make_payment(loan_id):
 
     try:
         amount = float(data['amount'])
+        account_id = data['account_id']
 
+        # get bank acc -- funds from which we gon use to pay the loan
+        from src.managers.AccountManager import AccountManager
+        acc_manager = AccountManager()
+        account = acc_manager.get_account_by_id(account_id)
+
+        if not account: return jsonify(error="account not found"), 404
+
+        # check if user doesnt have access to this acc
+        if current_user['role'] != 'admin' and account.user_id != current_user['user_id']:
+            return jsonify(error="unauthorized access to loan"), 403
+
+        # make sure acc has sufficient funds
+        if account.balance < amount: return jsonify(error="insufficient funds in selected account"), 400
+
+        # withdrawing from acc first
+        try: acc_manager.withdraw(account_id, amount, f"Payment  for {loan.loan_type} loan")
+        except ValueError as e: return jsonify(error=str(e)), 400
+
+        # AND THEEEEEEEN MAKE LOAN PAYMENT
         new_balance = loan_manager.make_payment(loan_id, amount)
 
         if new_balance is not None:
             return jsonify(message="payment successful", balance=new_balance), 200
-        else:
+        else: # UPD -- if loan payment fails, refund to the account
+            acc_manager.deposit(account_id, amount, f"Refund for failed {loan.loan_type} loan payment")
             return jsonify(error="failed to process payment"), 500
     except ValueError as e:
         return jsonify(error=str(e)), 400

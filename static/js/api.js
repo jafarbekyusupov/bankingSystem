@@ -251,10 +251,14 @@ class BankAPI {
      * make a payment on a loan
      * @param {string} loanId - loan id
      * @param {number} amount - payment amount
+     * @param {string} accountId - account to pay from
      * @returns {promise} - payment result
-     */
-    async makeLoanPayment(loanId, amount) {
-        return this.request('POST', `/loans/${loanId}/payment`, { amount });
+    */
+    async makeLoanPayment(loanId, amount, accountId) {
+        return this.request('POST', `/loans/${loanId}/payment`, {
+            amount,
+            account_id: accountId
+        });
     }
 
     /**

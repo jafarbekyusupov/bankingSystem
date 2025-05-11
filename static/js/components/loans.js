@@ -6,13 +6,11 @@
 class LoansComponent {
     constructor() {
         this.loans = [];
+        this.accounts = [];
         this.selectedLoan = null;
         this.initEventListeners();
     }
 
-    /**
-     * init event listeners
-     */
     initEventListeners() {
         // new loan btn
         document.getElementById('new-loan-btn').addEventListener('click',
@@ -42,6 +40,14 @@ class LoansComponent {
     setLoans(loans) {
         this.loans = loans || [];
         this.updateLoansUI();
+    }
+
+    /**
+     * Set accounts data
+     * @param {Array} accounts - user accounts
+     */
+    setAccounts(accounts) {
+        this.accounts = accounts || [];
     }
 
     /**
@@ -87,11 +93,9 @@ class LoansComponent {
      */
     async viewLoanDetails(loanId) {
         try {
-            // get loan details
             const loan = await api.getLoan(loanId);
             this.selectedLoan = loan;
 
-            // get monthly payment
             let paymentInfo = { payment_amount: 0 };
 
             try {
@@ -100,7 +104,6 @@ class LoansComponent {
                 console.error('error calculating payment:', error);
             }
 
-            // upd modal ui
             document.getElementById('modal-loan-type').textContent = loan.loan_type;
             document.getElementById('modal-loan-amount').textContent = this.formatCurrency(loan.amount);
             document.getElementById('modal-loan-rate').textContent = loan.interest_rate;
@@ -110,7 +113,6 @@ class LoansComponent {
             document.getElementById('modal-loan-balance').textContent = this.formatCurrency(loan.balance);
             document.getElementById('modal-loan-purpose').textContent = loan.purpose || 'not specified';
 
-            // upd action btns
             const actionsContainer = document.getElementById('loan-actions');
             actionsContainer.innerHTML = '';
 
@@ -121,8 +123,6 @@ class LoansComponent {
                 payBtn.addEventListener('click', this.showPaymentModal.bind(this));
                 actionsContainer.appendChild(payBtn);
             }
-
-            // show modal
             document.getElementById('loan-modal').style.display = 'block';
         } catch (error) {
             console.error('error viewing loan details:', error);
@@ -134,11 +134,9 @@ class LoansComponent {
      * show new loan modal
      */
     showNewLoanModal() {
-        // reset form
         document.getElementById('new-loan-form').reset();
         document.getElementById('new-loan-error').style.display = 'none';
 
-        // show modal
         document.getElementById('new-loan-modal').style.display = 'block';
     }
 
@@ -148,12 +146,32 @@ class LoansComponent {
     showPaymentModal() {
         if (!this.selectedLoan) return;
 
-        // reset form
         document.getElementById('payment-form').reset();
         document.getElementById('payment-error').style.display = 'none';
 
-        // set loan id
         document.getElementById('payment-loan-id').value = this.selectedLoan.loan_id;
+
+        const accountSelect = document.getElementById('payment-account');
+        accountSelect.innerHTML = '<option value="">Select account</option>';
+
+        if (this.accounts.length > 0) {
+            const activeAccounts = this.accounts.filter(account => account.active && account.balance > 0);
+
+            if (activeAccounts.length > 0) {
+                activeAccounts.forEach(account => {
+                    const option = document.createElement('option');
+                    option.value = account.account_id;
+                    option.textContent = `${account.account_type} - ${account.account_number} (${this.formatCurrency(account.balance)})`;
+                    accountSelect.appendChild(option);
+                });
+            } else {
+                const option = document.createElement('option');
+                option.value = "";
+                option.textContent = "No accounts with available balance";
+                option.disabled = true;
+                accountSelect.appendChild(option);
+            }
+        }
 
         // pre-fill payment amount
         try {
@@ -186,13 +204,10 @@ class LoansComponent {
         try {
             await api.applyForLoan(loanData);
 
-            // close modal
             this.closeAllModals();
 
-            // show success msg
             alert('loan app submitted successfully');
 
-            // reload loans
             const loansData = await api.getLoans();
             this.setLoans(loansData.loans);
         } catch (error) {
@@ -212,22 +227,29 @@ class LoansComponent {
         if (!this.selectedLoan) return;
 
         const loanId = document.getElementById('payment-loan-id').value;
+        const accountId = document.getElementById('payment-account').value;
         const amount = parseFloat(document.getElementById('payment-amount').value);
 
-        try {
-            await api.makeLoanPayment(loanId, amount);
+        if (!accountId) {
+            const errorElem = document.getElementById('payment-error');
+            errorElem.textContent = 'Please select an account to pay from';
+            errorElem.style.display = 'block';
+            return;
+        }
 
-            // close modal
+        try {
+            await api.makeLoanPayment(loanId, amount, accountId);
+
             this.closeAllModals();
 
-            // refresh loan details
+            const accountsData = await api.getAccounts();
+            this.setAccounts(accountsData.accounts);
+
             await this.viewLoanDetails(loanId);
 
-            // reload loans
             const loansData = await api.getLoans();
             this.setLoans(loansData.loans);
 
-            // show success msg
             alert('payment processed successfully');
         } catch (error) {
             const errorElem = document.getElementById('payment-error');
