@@ -56,7 +56,8 @@ Open your browser and navigate to `http://localhost:5000`
 ### 👤 Sample User Account
 - Username: user
 - Password: user123
-> NOTE: You can also create your own User Account via Registration Form
+> [!TIP]
+> You can also create your own User Account via Registration Form
 
 ## 📚 API Documentation
  
