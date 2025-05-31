@@ -1,6 +1,16 @@
 # 🏦 Banking System
 
-#### A full-stack banking application with a Python Flask backend and HTML / CSS / JavaScript frontend.
+#### A full-stack banking application
+
+<div>
+  <img src="https://img.shields.io/badge/Flask-2.3.x-white?logo=flask&logoColor=white&labelColor=000000&style=for-the-badge" alt="Flask">
+  <img src="https://img.shields.io/badge/Python-3.8+-white?logo=python&logoColor=white&labelColor=3776AB&style=for-the-badge" alt="Python">
+  <img src="https://img.shields.io/badge/HTML5-white?logo=html5&logoColor=white&labelColor=E34F26&style=for-the-badge" alt="HTML5">
+  <img src="https://img.shields.io/badge/CSS3-white?logo=css3&logoColor=white&labelColor=1572B6&style=for-the-badge" alt="CSS3">
+<!--   <img src="https://img.shields.io/badge/JavaScript-white?logo=javascript&logoColor=white&labelColor=F7DF1E&style=for-the-badge" alt="JavaScript">
+  <img src="https://img.shields.io/badge/PostgreSQL-white?logo=postgresql&logoColor=white&labelColor=4169E1&style=for-the-badge" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/AWS_S3-white?logo=amazons3&logoColor=white&labelColor=FF9900&style=for-the-badge" alt="AWS S3"> -->
+</div>
 
 ## 🎬 Demo Video
 
