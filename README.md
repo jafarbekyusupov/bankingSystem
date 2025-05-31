@@ -1,6 +1,5 @@
 # 🏦 Banking System
-
-#### A full-stack banking application
+### Full-stack Single Page Banking Application
 
 <div>
   <img src="https://img.shields.io/badge/Flask-2.3.x-white?logo=flask&logoColor=white&labelColor=000000&style=for-the-badge" alt="Flask">
