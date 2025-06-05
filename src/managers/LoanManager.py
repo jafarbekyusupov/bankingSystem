@@ -14,7 +14,9 @@ class LoanManager:
 			db.session.add(loan)
 			db.session.commit()
 			return loan.loan_id
-		except Exception as e: db.session.rollback(); return None
+		except Exception as e:
+			db.session.rollback()
+			return None
 
 	def update_loan(self, loan_id, loan_data):
 		try:
@@ -29,7 +31,9 @@ class LoanManager:
 
 			db.session.commit()
 			return True
-		except Exception as e: db.session.rollback(); return False
+		except Exception as e:
+			db.session.rollback()
+			return False
 
 	def approve_loan(self, loan_id):
 		try:
@@ -39,7 +43,9 @@ class LoanManager:
 			db.session.commit()
 			return True
 		except ValueError: raise
-		except Exception as e: db.session.rollback(); raise e
+		except Exception as e:
+			db.session.rollback()
+			raise e
 
 	def reject_loan(self, loan_id):
 		try:
@@ -49,7 +55,9 @@ class LoanManager:
 			db.session.commit()
 			return True
 		except ValueError: raise
-		except Exception as e: db.session.rollback(); raise e
+		except Exception as e:
+			db.session.rollback()
+			raise e
 
 	def activate_loan(self, loan_id):
 		try:
@@ -59,7 +67,9 @@ class LoanManager:
 			db.session.commit()
 			return True
 		except ValueError: raise
-		except Exception as e: db.session.rollback(); raise e
+		except Exception as e:
+			db.session.rollback()
+			raise e
 
 	def make_payment(self, loan_id, amount):
 		try:
@@ -69,7 +79,9 @@ class LoanManager:
 			db.session.commit()
 			return new_balance
 		except ValueError: raise
-		except Exception as e: db.session.rollback(); raise e
+		except Exception as e:
+			db.session.rollback()
+			raise e
 
 	def calculate_payment(self, loan_id):
 		loan = self.get_loan_by_id(loan_id)

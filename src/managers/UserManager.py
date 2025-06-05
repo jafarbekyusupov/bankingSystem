@@ -16,7 +16,9 @@ class UserManager:
             db.session.commit()
             return user.user_id
         except ValueError: raise
-        except Exception as e: db.session.rollback(); return None
+        except Exception as e:
+            db.session.rollback()
+            return None
 
     def update_user(self, user_id, user_data):
         try:
@@ -29,7 +31,9 @@ class UserManager:
                 if hasattr(user, key) and key != 'user_id': setattr(user, key, value)
             db.session.commit()
             return True
-        except Exception as e: db.session.rollback(); return False
+        except Exception as e:
+            db.session.rollback()
+            return False
 
     def delete_user(self, user_id):
         try:
@@ -38,7 +42,9 @@ class UserManager:
             db.session.delete(user)
             db.session.commit()
             return True
-        except Exception as e: db.session.rollback(); return False
+        except Exception as e:
+            db.session.rollback()
+            return False
 
     def authenticate_user(self, username, password):
         user = self.get_user_by_username(username)

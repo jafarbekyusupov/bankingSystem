@@ -13,7 +13,8 @@ def get_loans():
     curUser = get_current_user()
     # admin can get all loans | regular users only get their loans
     loans = loan_manager.get_all_loans() if curUser['role']=='admin' and request.args.get('all')=='true' else loan_manager.get_user_loans(curUser['user_id'])
-    res = []; for ll in loans: res.append(ll.to_dict())
+    res = []
+    for ll in loans: res.append(ll.to_dict())
     return jsonify(loans=res),200
 
 
@@ -61,7 +62,8 @@ def make_payment(loan_id):
     loan = loan_manager.get_loan_by_id(loan_id)
     if not loan: return jsonify(error="loan not found"), 404
     if curUser['role'] != 'admin' and loan.user_id != curUser['user_id']: return jsonify(error="unauthorized access to loan"),403
-    data = request.get_json(); if 'amount' not in data: return jsonify(error="amount is required"),400
+    data = request.get_json()
+    if 'amount' not in data: return jsonify(error="amount is required"),400
     try:
         amount = float(data['amount'])
         accId = data['account_id']
@@ -80,8 +82,11 @@ def make_payment(loan_id):
 
         # AND THEEEEEEEN MAKE LOAN PAYMENT
         newBlnc = loan_manager.make_payment(loan_id, amount)
-        if newBlnc is not None: return jsonify(message="payment successful", balance=newBlnc), 200
-        else: acc_manager.deposit(accId, amount, f"Refund for failed {loan.loan_type} loan payment"); return jsonify(error="failed to process payment"), 500 # UPD -- if loan payment fails → refund to the account
+        if newBlnc is not None:
+            return jsonify(message="payment successful", balance=newBlnc), 200
+        else:
+            acc_manager.deposit(accId, amount, f"Refund for failed {loan.loan_type} loan payment")
+            return jsonify(error="failed to process payment"), 500 # UPD -- if loan payment fails → refund to the account
     except ValueError as e: return jsonify(error=str(e)), 400
 
 

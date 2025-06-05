@@ -12,7 +12,8 @@ def get_accounts():
     currUser = get_current_user()
     # admin can get access to ALL accs | regular users only get their accs
     accounts = account_manager.get_all_accounts() if currUser['role'] == 'admin' and request.args.get('all') == 'true' else account_manager.get_user_accounts(currUser['user_id'])
-    res = []; for acc in accounts: res.append(acc.to_dict())
+    res = []
+    for acc in accounts: res.append(acc.to_dict())
     return jsonify(accounts=res), 200
 
 
@@ -64,7 +65,9 @@ def close_account(account_id):
     if not acc: return jsonify(error="account not found"), 404
     if currUser['role'] != 'admin' and acc.user_id != currUser['user_id']: return jsonify(error="unauthorized access to account"),403 # check if user has access to this acc
 
-    try: res = account_manager.close_account(account_id); return jsonify(message="account closed successfully"),200 if res else jsonify(error="failed to close account"), 500
+    try:
+        res = account_manager.close_account(account_id)
+        return jsonify(message="account closed successfully"),200 if res else jsonify(error="failed to close account"), 500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
@@ -133,7 +136,8 @@ def get_account_transactions(account_id):
     if not acc: return jsonify(error="account not found"), 404
     if currUser['role'] != 'admin' and acc.user_id != currUser['user_id']: return jsonify(error="unauthorized access to account"), 403
     transcs = account_manager.get_transactions(account_id=account_id)
-    res = []; for tr in transcs: res.append(tr.to_dict())
+    res = []
+    for tr in transcs: res.append(tr.to_dict())
     return jsonify(transactions=res),200
 
 
@@ -142,5 +146,6 @@ def get_account_transactions(account_id):
 def get_user_transactions():
     currUser = get_current_user()
     transcs = account_manager.get_transactions(user_id=currUser['user_id'])
-    res = []; for tr in transcs: res.append(tr.to_dict())
+    res = []
+    for tr in transcs: res.append(tr.to_dict())
     return jsonify(transactions=res),200

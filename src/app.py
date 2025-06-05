@@ -75,8 +75,11 @@ def create_app():
 	# manual init endpoint | backup method
 	@app.route('/init-database')
 	def manual_init():
-		try: res = auto_initialize_database(); return jsonify(res), 200
-		except Exception as e: return jsonify({'error': str(e)}), 500
+		try:
+			res = auto_initialize_database()
+			return jsonify(res), 200
+		except Exception as e:
+			return jsonify({'error': str(e)}), 500
 
 	return app
 

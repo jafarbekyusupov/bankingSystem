@@ -15,7 +15,9 @@ class AccountManager: # mng acc ops w DB
 			db.session.commit()
 			if acc.balance>0: self._create_transaction(acc.account_id,'deposit',acc.balance,'initial deposit')
 			return acc.account_id
-		except Exception as e: db.session.rollback(); raise e
+		except Exception as e:
+			db.session.rollback()
+			raise e
 
 	def update_account(self, account_id, account_data): # bool
 		try:
@@ -27,7 +29,9 @@ class AccountManager: # mng acc ops w DB
 
 			db.session.commit()
 			return True
-		except Exception as e: db.session.rollback(); return False
+		except Exception as e:
+			db.session.rollback()
+			return False
 
 	def close_account(self, account_id): #bool | check for non zero values
 		try:
@@ -38,7 +42,9 @@ class AccountManager: # mng acc ops w DB
 			db.session.commit()
 			return True
 		except ValueError: raise
-		except Exception as e: db.session.rollback(); return False
+		except Exception as e:
+			db.session.rollback()
+			return False
 
 	def deposit(self, account_id, amount, description=None): # new balance
 		try:
@@ -52,7 +58,9 @@ class AccountManager: # mng acc ops w DB
 			self._create_transaction(account_id,'deposit',amount, description or 'deposit') # transac hstry
 			return float(acc.balance)
 		except ValueError: raise
-		except Exception as e: db.session.rollback(); raise e
+		except Exception as e:
+			db.session.rollback()
+			raise e
 
 	def withdraw(self, account_id, amount, description=None): # new balance if succs else none
 		try:
@@ -69,7 +77,9 @@ class AccountManager: # mng acc ops w DB
 			self._create_transaction(account_id,'withdrawal',amount,description or 'withdrawal')
 			return float(acc.balance)
 		except ValueError: raise
-		except Exception as e: db.session.rollback(); raise e
+		except Exception as e:
+			db.session.rollback()
+			raise e
 
 	def transfer(self, from_account_id, to_account_id, amount, description=None): #bpol
 		try:
@@ -91,7 +101,9 @@ class AccountManager: # mng acc ops w DB
 			self._create_transaction(from_account_id,'transfer',amount,description or 'transfer',to_account_id)
 			return True
 		except ValueError: raise
-		except Exception as e: db.session.rollback(); raise e
+		except Exception as e:
+			db.session.rollback()
+			raise e
 
 	def get_transactions(self, account_id=None, user_id=None): #list of transac objs
 		#filer transacs of user
@@ -112,4 +124,6 @@ class AccountManager: # mng acc ops w DB
 			db.session.add(transaction)
 			db.session.commit()
 			return transaction.transaction_id
-		except Exception as e: db.session.rollback(); return None
+		except Exception as e:
+			db.session.rollback()
+			return None
