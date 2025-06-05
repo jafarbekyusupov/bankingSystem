@@ -17,7 +17,10 @@ def register():
 
     try:# create user
         user_id = user_manager.create_user(data)
-        return jsonify(message="user registered successfully", user_id=user_id), 201 if user_id else jsonify(error="failed to register user"), 500
+        if user_id:
+            return jsonify(message="user registered successfully", user_id=user_id), 201
+        else:
+            return jsonify(error="failed to register user"), 500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
