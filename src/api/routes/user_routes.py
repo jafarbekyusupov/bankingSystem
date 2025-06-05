@@ -74,7 +74,10 @@ def update_profile():
     if 'role' in data: del data['role']
 
     res = user_manager.update_user(cUser['user_id'], data)
-    return jsonify(message="profile updated successfully"), 200 if res else jsonify(error="failed to update profile"), 500
+    if res:
+        return jsonify(message="profile updated successfully"), 200
+    else:
+        return jsonify(error="failed to update profile"), 500
 
 
 @user_bp.route('', methods=['GET'])
@@ -120,7 +123,8 @@ def get_user(user_id): # ADMIN ONLY
 def update_user(user_id): # ADMIN ONLY
     data = request.get_json()
     res = user_manager.update_user(user_id, data)
-    return jsonify(message="user updated successfully"),200 if res else jsonify(error="failed to update user"), 500
+    if res: return jsonify(message="user updated successfully"),200
+    else: return jsonify(error="failed to update user"), 500
 
 
 @user_bp.route('/<user_id>', methods=['DELETE'])
@@ -128,4 +132,5 @@ def update_user(user_id): # ADMIN ONLY
 @admin_required
 def delete_user(user_id): # ADMIN ONLY
     res = user_manager.delete_user(user_id)
-    return jsonify(message="user deleted successfully"),200 if res else jsonify(error="failed to delete user"),500
+    if res: return jsonify(message="user deleted successfully"),200
+    else: return jsonify(error="failed to delete user"),500

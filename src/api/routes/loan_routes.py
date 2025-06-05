@@ -39,7 +39,8 @@ def create_loan():
     if 'user_id' not in data or curUser['role'] != 'admin': data['user_id'] = curUser['user_id']
     try:
         loan_id = loan_manager.create_loan_application(data)
-        return jsonify(message="loan application submitted successfully", loan_id=loan_id),201 if loan_id else jsonify(error="failed to submit loan application"), 500
+        if loan_id: return jsonify(message="loan application submitted successfully", loan_id=loan_id),201
+        else: return jsonify(error="failed to submit loan application"), 500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
@@ -53,7 +54,8 @@ def update_loan(loan_id):
     if loan.status != 'pending' and curUser['role'] != 'admin': return jsonify(error="cannot update loan after review has started"), 403
     data = request.get_json()
     res = loan_manager.update_loan(loan_id, data)
-    return jsonify(message="loan updated successfully"),200 if res else jsonify(error="failed to update loan"), 500
+    if res: return jsonify(message="loan updated successfully"),200
+    else: return jsonify(error="failed to update loan"), 500
 
 @loan_bp.route('/<loan_id>/payment', methods=['POST'])
 @jwt_required()
@@ -111,7 +113,8 @@ def calculate_payment(loan_id):
 def approve_loan(loan_id):
     try:
         res = loan_manager.approve_loan(loan_id)
-        return jsonify(message="loan approved successfully"),200 if res else jsonify(error="failed to approve loan"),500
+        if res: return jsonify(message="loan approved successfully"),200
+        else: return jsonify(error="failed to approve loan"),500
     except ValueError as e: return jsonify(error=str(e)),400
 
 
@@ -121,7 +124,8 @@ def approve_loan(loan_id):
 def reject_loan(loan_id):
     try:
         res = loan_manager.reject_loan(loan_id)
-        return jsonify(message="loan rejected successfully"),200 if res else jsonify(error="failed to reject loan"), 500
+        if res: return jsonify(message="loan rejected successfully"),200
+        else: return jsonify(error="failed to reject loan"), 500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
@@ -131,6 +135,7 @@ def reject_loan(loan_id):
 def activate_loan(loan_id): # ADMIN ONLY
     try:
         res = loan_manager.activate_loan(loan_id)
-        return jsonify(message="loan activated successfully"),200 if res else jsonify(error="failed to activate loan"), 500
+        if res: return jsonify(message="loan activated successfully"),200
+        else: return jsonify(error="failed to activate loan"), 500
     except ValueError as e: return jsonify(error=str(e)), 400
 # ====================================== #

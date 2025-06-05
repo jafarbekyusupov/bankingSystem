@@ -11,7 +11,8 @@ account_manager = AccountManager()
 def get_accounts():
     currUser = get_current_user()
     # admin can get access to ALL accs | regular users only get their accs
-    accounts = account_manager.get_all_accounts() if currUser['role'] == 'admin' and request.args.get('all') == 'true' else account_manager.get_user_accounts(currUser['user_id'])
+    if currUser['role'] == 'admin' and request.args.get('all') == 'true': accounts = account_manager.get_all_accounts()
+    else: accounts = account_manager.get_user_accounts(currUser['user_id'])
     res = []
     for acc in accounts: res.append(acc.to_dict())
     return jsonify(accounts=res), 200
@@ -39,7 +40,8 @@ def create_account():
     if 'user_id' not in data or currUser['role'] != 'admin': data['user_id'] = currUser['user_id'] # set user_id to current user unless specified by admin
     try:
         accId = account_manager.create_account(data)
-        return jsonify(message="account created successfully", account_id=accId),201 if accId else jsonify(error="failed to create account"), 500
+        if accId: return jsonify(message="account created successfully", account_id=accId),201
+        else: return jsonify(error="failed to create account"), 500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
@@ -54,7 +56,8 @@ def update_account(account_id):
     data = request.get_json()
     if 'balance' in data: del data['balance'] # dont allow changing balance directly
     res = account_manager.update_account(account_id, data)
-    return jsonify(message="account updated successfully"),200 if res else jsonify(error="failed to update account"),500
+    if res: return jsonify(message="account updated successfully"),200
+    else: return jsonify(error="failed to update account"),500
 
 
 @account_bp.route('/<account_id>/close', methods=['POST'])
@@ -67,7 +70,8 @@ def close_account(account_id):
 
     try:
         res = account_manager.close_account(account_id)
-        return jsonify(message="account closed successfully"),200 if res else jsonify(error="failed to close account"), 500
+        if res: return jsonify(message="account closed successfully"),200
+        else: return jsonify(error="failed to close account"), 500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
@@ -85,7 +89,8 @@ def deposit(account_id):
         amount = float(data['amount'])
         desc = data.get('description')
         newblnc = account_manager.deposit(account_id,amount,desc)
-        return jsonify(message="deposit successful", balance=newblnc), 200 if newblnc is not None else jsonify(error="failed to process deposit"), 500
+        if newblnc is not None: return jsonify(message="deposit successful", balance=newblnc), 200
+        else: return jsonify(error="failed to process deposit"), 500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
@@ -103,7 +108,8 @@ def withdraw(account_id):
         amount = float(data['amount'])
         desc = data.get('description')
         newblnc = account_manager.withdraw(account_id, amount, desc)
-        return jsonify(message="withdrawal successful", balance=newblnc),200 if newblnc is not None else jsonify(error="failed to process withdrawal"),500
+        if newblnc is not None: return jsonify(message="withdrawal successful", balance=newblnc),200
+        else: return jsonify(error="failed to process withdrawal"),500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
@@ -124,7 +130,8 @@ def transfer():
         amount = float(data['amount'])
         desc = data.get('description')
         res = account_manager.transfer(data['from_account_id'],data['to_account_id'],amount,desc)
-        return jsonify(message="transfer successful"),200 if res else jsonify(error="failed to process transfer"),500
+        if res: return jsonify(message="transfer successful"),200
+        else: return jsonify(error="failed to process transfer"),500
     except ValueError as e: return jsonify(error=str(e)), 400
 
 
