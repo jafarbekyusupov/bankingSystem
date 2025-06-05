@@ -79,7 +79,7 @@ def create_app():
 			res = auto_initialize_database()
 			return jsonify(res), 200
 		except Exception as e:
-			return jsonify({'error': str(e)}), 500
+			return jsonify({'error': str(e), 'retry': 'try again in 30 seconds'}), 500
 
 	return app
 
