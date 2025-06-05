@@ -22,6 +22,18 @@
 
 **Watch Demo:** [Mini Banking System Web App Video Demo | Full-Stack Python Flask & JS](https://www.youtube.com/watch?v=czdNo4DnRyc)
 
+## 🔧 Usage
+
+### 👨🏻‍💻 Default Admin Account
+ - Username: admin
+ - Password: admin123
+
+### 👤 Sample User Account
+- Username: user
+- Password: user123
+> [!TIP]
+> You can also create your own User Account via Registration Form
+
 ## 📋 Features
 
 - User authentication and account management
@@ -60,18 +72,6 @@ python run.py
 
 4. 🌐 Access the web application:
 Open your browser and navigate to `http://localhost:5000`
-
-## 🔧 Usage
-
-### 👨🏻‍💻 Default Admin Account
- - Username: admin
- - Password: admin123
-
-### 👤 Sample User Account
-- Username: user
-- Password: user123
-> [!TIP]
-> You can also create your own User Account via Registration Form
 
 ## 📚 API Documentation
  
