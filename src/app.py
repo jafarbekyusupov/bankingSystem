@@ -16,8 +16,8 @@ def create_app():
 	app = Flask(__name__, static_folder='../static', static_url_path='')
 
 	# prod configs
-	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-	app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-key-change-in-production')
+	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+	app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
 
 	dbUrl = os.environ.get('DATABASE_URL')
 	if dbUrl:
