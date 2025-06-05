@@ -14,7 +14,7 @@
 [![Try It Now](https://img.shields.io/badge/TRY_IT_HERE-FF6B6B?style=for-the-badge&logo=firefox&logoColor=white)](https://bankingsystem-0ybm.onrender.com/)
 > [!IMPORTANT]  
 > 🔸 **Cold Start Delay**: This demo runs on a free-tier cloud service. If the link hasn't been clicked recently, the server may enter *sleep mode*.  
-> 🔸 **First load** could take from **10-50 seconds**. After first load, following one will be fast
+> 🔸 **First load** could take from **10-50 seconds**. After first load, following ones will be fast
 
 ## 🎬 Demo Video
 
@@ -111,6 +111,7 @@ BankingSystem/
 ├── src/                              # Source code directory
 │   ├── __init__.py                   # Package initialization
 │   ├── app.py                        # Flask application setup
+│   ├── models.py                     # 
 │   ├── core/                         # Core banking functionality
 │   │   ├── __init__.py
 │   │   ├── User.py                   # User class definition
@@ -148,7 +149,7 @@ BankingSystem/
 │   │   │   ├── transactions.js
 │   │   │   ├── transfers.js
 │   └─  └─  └── loans.js
-├── data/                             # Data storage directory
+├── data/                             # LOCAL Data storage directory
 │   ├── users.json                    # User data
 │   ├── accounts.json                 # Account data
 │   ├── transactions.json             # Transaction records
