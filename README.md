@@ -1,4 +1,4 @@
-# 🏦 Banking System
+# [🏦 Banking System](https://bankingsystem-0ybm.onrender.com/)
 ### Full-stack Single Page Banking Application
 
 <div>
@@ -6,11 +6,12 @@
   <img src="https://img.shields.io/badge/Python-3.8+-white?logo=python&logoColor=white&labelColor=3776AB&style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/HTML5-white?logo=html5&logoColor=white&labelColor=E34F26&style=for-the-badge" alt="HTML5">
   <img src="https://img.shields.io/badge/CSS3-white?logo=css3&logoColor=white&labelColor=1572B6&style=for-the-badge" alt="CSS3">
-<!--   <img src="https://img.shields.io/badge/JavaScript-white?logo=javascript&logoColor=white&labelColor=F7DF1E&style=for-the-badge" alt="JavaScript">
+  <img src="https://img.shields.io/badge/JavaScript-white?logo=javascript&logoColor=black&labelColor=F7DF1E&style=for-the-badge" alt="JavaScript">
   <img src="https://img.shields.io/badge/PostgreSQL-white?logo=postgresql&logoColor=white&labelColor=4169E1&style=for-the-badge" alt="PostgreSQL">
-  <img src="https://img.shields.io/badge/AWS_S3-white?logo=amazons3&logoColor=white&labelColor=FF9900&style=for-the-badge" alt="AWS S3"> -->
 </div>
 
+## [🌐 Live Demo](https://bankingsystem-0ybm.onrender.com/)
+[→ Live Demo: Banking System App](https://bankingsystem-0ybm.onrender.com/)
 ## 🎬 Demo Video
 
 [![Banking System Demo](https://img.youtube.com/vi/czdNo4DnRyc/0.jpg)](https://www.youtube.com/watch?v=czdNo4DnRyc)
