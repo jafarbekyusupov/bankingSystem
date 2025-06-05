@@ -5,26 +5,18 @@ class TransactionsComponent {
         this.initEventListeners();
     }
 
-    initEventListeners() {
+    initEventListeners(){
         // filter controls
-        document.getElementById('transaction-account').addEventListener('change',
-            this.filterTransactions.bind(this));
-        document.getElementById('transaction-type').addEventListener('change',
-            this.filterTransactions.bind(this));
+        document.getElementById('transaction-account').addEventListener('change',this.filterTransactions.bind(this));
+        document.getElementById('transaction-type').addEventListener('change',this.filterTransactions.bind(this));
     }
 
-    /**
-     * set transactions and accounts data
-     * @param {Array} transactions - user transactions
-     * @param {Array} accounts - user accounts
-     */
     setData(transactions, accounts) {
         this.transactions = transactions || [];
         this.accounts = accounts || [];
         this.updateTransactionsUI();
     }
 
-    /** upd transactions ui */
     updateTransactionsUI() {
         // populate account filter
         const accountSelect = document.getElementById('transaction-account');
@@ -41,48 +33,29 @@ class TransactionsComponent {
         this.filterTransactions();
     }
 
-    /** filter transactions based on selected options */
     filterTransactions() {
         const accountId = document.getElementById('transaction-account').value;
         const transactionType = document.getElementById('transaction-type').value;
         const transactionsList = document.getElementById('transactions-list');
 
-        // filter transacs
         let filteredTransactions = [...this.transactions];
 
-        if (accountId !== 'all') {
-            filteredTransactions = filteredTransactions.filter(t =>
-                t.account_id === accountId || t.destination_account_id === accountId
-            );
-        }
+        if(accountId !== 'all'){ filteredTransactions = filteredTransactions.filter(t => t.account_id === accountId || t.destination_account_id === accountId);}
 
-        if (transactionType !== 'all') {
-            filteredTransactions = filteredTransactions.filter(t =>
-                t.transaction_type === transactionType
-            );
-        }
+        if(transactionType !== 'all'){ filteredTransactions = filteredTransactions.filter(t => t.transaction_type === transactionType);}
 
         // sort transacs by recency date -- newest to oldest
         filteredTransactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
         // disp transacs
-        if (filteredTransactions.length > 0) {
+        if(filteredTransactions.length > 0){
             transactionsList.innerHTML = '';
-
-            filteredTransactions.forEach(transaction => {
-                transactionsList.appendChild(this.createTransactionElement(transaction));
-            });
-        } else {
-            transactionsList.innerHTML = '<div class="empty-state">No transactions found</div>';
+            filteredTransactions.forEach(transaction =>{ transactionsList.appendChild(this.createTransactionElement(transaction));});
         }
+        else{ transactionsList.innerHTML = '<div class="empty-state">No transactions found</div>';}
     }
 
-    /**
-     * create transaction element
-     * @param {Object} transaction - data
-     * @returns {HTMLElement} - element
-     */
-    createTransactionElement(transaction) {
+    createTransactionElement(transaction){
         const transactionEl = document.createElement('div');
         transactionEl.className = 'transaction-item';
 
@@ -97,7 +70,7 @@ class TransactionsComponent {
         let amountPrefix = '';
         let detailsText = '';
 
-        switch (transaction.transaction_type) {
+        switch(transaction.transaction_type){
             case 'deposit':
                 amountClass = 'deposit';
                 amountPrefix = '+';
@@ -109,7 +82,7 @@ class TransactionsComponent {
                 detailsText = `Withdrawal from ${accountInfo}`;
                 break;
             case 'transfer':
-                if (transaction.destination_account_id) {
+                if(transaction.destination_account_id){
                     // transfer
                     amountClass = 'withdrawal';
                     amountPrefix = '-';
@@ -121,12 +94,7 @@ class TransactionsComponent {
                         'Unknown Account';
 
                     detailsText = `Transfer from ${accountInfo} to ${destAccountInfo}`;
-                } else {
-                    // incoming transfer -- which wont liekly to happen w our api struct, but still
-                    amountClass = 'deposit';
-                    amountPrefix = '+';
-                    detailsText = `Transfer to ${accountInfo}`;
-                }
+                } else{ amountClass = 'deposit'; amountPrefix = '+'; detailsText = `Transfer to ${accountInfo}`;} // incoming transfer -- wont liekly happend w curr api struct, but still
                 break;
         }
 
@@ -144,11 +112,6 @@ class TransactionsComponent {
         return transactionEl;
     }
 
-    /**
-     * format currency amount
-     * @param {number} amount - amount to format
-     * @returns {string} - formatted currency str
-     */
     formatCurrency(amount) {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -156,12 +119,7 @@ class TransactionsComponent {
         }).format(amount);
     }
 
-    /**
-     * format date
-     * @param {string} dateString - iso date str
-     * @returns {string} - formatted date str
-     */
-    formatDate(dateString) {
+    formatDate(dateString){
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
             year: 'numeric',

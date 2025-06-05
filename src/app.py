@@ -1,101 +1,186 @@
-"""
-flask app setup
-"""
+""" UPD -- no shell access in free tier of render → impl auto db init"""
 
 import os
-from flask import Flask, render_template, send_from_directory
+import logging
+from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
+from src.models import db, User, Account, Loan, Transaction
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def create_app():
-    """ Create & Config Flask app """
-    app = Flask(__name__, static_folder='../static', static_url_path='')
+	app = Flask(__name__, static_folder='../static', static_url_path='')
 
-    # configs
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
-    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-key')
-    app.config['DATA_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+	# prod configs
+	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+	app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-key-change-in-production')
 
-    # make sure data dir exists
-    os.makedirs(app.config['DATA_FOLDER'], exist_ok=True)
+	dbUrl = os.environ.get('DATABASE_URL')
+	if dbUrl:
+		if dbUrl.startswith('postgres://'): dbUrl = dbUrl.replace('postgres://', 'postgresql://', 1)
+		app.config['SQLALCHEMY_DATABASE_URI'] = dbUrl
+		logger.info(" === using pqsl db === ")
+	else: # for local dev
+		app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banking.db'
+		logger.info(" === using SQLITE DB -- local === ")
 
-    # extension setup
-    CORS(app)
-    jwt = JWTManager(app)
+	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+	app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True,'pool_recycle': 300,}
 
-    # register api routes
-    from src.api.routes.user_routes import user_bp
-    from src.api.routes.account_routes import account_bp
-    from src.api.routes.loan_routes import loan_bp
+	CORS(app, origins="*")
+	jwt = JWTManager(app)
+	db.init_app(app)
+	migrate = Migrate(app, db)
 
-    app.register_blueprint(user_bp, url_prefix='/api/v1/users')
-    app.register_blueprint(account_bp, url_prefix='/api/v1/accounts')
-    app.register_blueprint(loan_bp, url_prefix='/api/v1/loans')
+	# UPD -- AUTO INIT DB on first run
+	with app.app_context():
+		try: auto_initialize_database()
+		except Exception as e: logger.error(f" !!! DB INIT ERRROR --  {e} !!! ")
 
-    # create init data files if does not exist
-    create_initial_data(app.config['DATA_FOLDER'])
+	# api routes
+	from src.api.routes.user_routes import user_bp
+	from src.api.routes.account_routes import account_bp
+	from src.api.routes.loan_routes import loan_bp
 
-    @app.route('/')
-    def index():
-        """ Serve the main index page """
-        return send_from_directory(app.static_folder, 'index.html')
+	app.register_blueprint(user_bp, url_prefix='/api/v1/users')
+	app.register_blueprint(account_bp, url_prefix='/api/v1/accounts')
+	app.register_blueprint(loan_bp, url_prefix='/api/v1/loans')
 
-    @app.errorhandler(404)
-    def not_found(e):
-        """ Handle 404 errors """
-        return send_from_directory(app.static_folder, '404.html'), 404
+	@app.route('/')
+	def index(): return send_from_directory(app.static_folder, 'index.html')
 
-    return app
+	@app.route('/<path:filename>')
+	def static_files(filename):
+		try: return send_from_directory(app.static_folder, filename)
+		except: return send_from_directory(app.static_folder, 'index.html') # if not found → defalut route
+
+	@app.errorhandler(404)
+	def not_found(e): return send_from_directory(app.static_folder, 'index.html'), 200
+
+	@app.route('/health')
+	def health(): # UPD -- added stability check endpoint for render
+		try:
+			user_count = User.query.count()
+			return {'status': 'healthy','service': 'banking-system','database': 'connected','users': user_count}, 200
+		except Exception as e:
+			return {
+				'status': 'unhealthy',
+				'service': 'banking-system',
+				'error': str(e)},500
+
+	# manual init endpoint | backup method
+	@app.route('/init-database')
+	def manual_init():
+		try: res = auto_initialize_database(); return jsonify(res), 200
+		except Exception as e: return jsonify({'error': str(e)}), 500
+
+	return app
 
 
-def create_initial_data(data_folder):
-    # create init data files if do not exist
-    data_files = ['users.json', 'accounts.json', 'transactions.json', 'loans.json']
+def auto_initialize_database():
+	try:
+		logger.info("checking db init...")
+		db.create_all()
+		logger.info("DB tables verified/created")
 
-    for file_name in data_files:
-        file_path = os.path.join(data_folder, file_name)
-        if not os.path.exists(file_path):
-            with open(file_path, 'w') as f:
-                f.write('[]')
+		if User.query.count() == 0: # check if init needed
+			logger.info("DB IS EMPTY → creating initial data...")
 
-    # create admin user if users.json is empty
-    from src.managers.UserManager import UserManager
-    user_manager = UserManager()
+			admin_user = User(
+				username='admin',
+				password='admin123',
+				email='admin@bankingsystem.com',
+				full_name='System Administrator',
+				role='admin'
+			)
+			db.session.add(admin_user)
 
-    if len(user_manager.get_all_users()) == 0:
-        # admin user created
-        user_manager.create_user({
-            'username': 'admin',
-            'password': 'admin123',
-            'email': 'admin@example.com',
-            'full_name': 'Admin User',
-            'role': 'admin'
-        })
+			sample_user = User(
+				username='user',
+				password='user123',
+				email='sampleuser@bankingsystem.com',
+				full_name='Sample User',
+				role='user'
+			)
+			db.session.add(sample_user)
+			db.session.commit()
 
-        # sample user
-        user_id = user_manager.create_user({
-            'username': 'user',
-            'password': 'user123',
-            'email': 'user@example.com',
-            'full_name': 'Sample User',
-            'role': 'user'
-        })
+			logger.info(" === default users created === ")
 
-        # sample accounts for user
-        from src.managers.AccountManager import AccountManager
-        account_manager = AccountManager()
+			checking_account = Account(user_id=sample_user.user_id,account_type='Checking',balance=999999.99)
+			db.session.add(checking_account)
 
-        account_manager.create_account({
-            'user_id': user_id,
-            'account_type': 'Checking',
-            'balance': 1000.00,
-            'account_number': '1000001'
-        })
+			savings_account = Account(user_id=sample_user.user_id,account_type='Savings',balance=10000.00)
+			db.session.add(savings_account)
+			db.session.commit()
 
-        account_manager.create_account({
-            'user_id': user_id,
-            'account_type': 'Savings',
-            'balance': 5000.00,
-            'account_number': '1000002'
-        })
+			logger.info("🏦 Sample accounts created")
+
+			checking_transaction = Transaction(
+				account_id=checking_account.account_id,
+				transaction_type='deposit',
+				amount=1500.00,
+				description='Initial deposit'
+			)
+			db.session.add(checking_transaction)
+
+			savings_transaction = Transaction(
+				account_id=savings_account.account_id,
+				transaction_type='deposit',
+				amount=10000.00,
+				description='Initial deposit'
+			)
+			db.session.add(savings_transaction)
+			db.session.commit()
+
+			logger.info("💳 Sample transactions created")
+
+			ucnt = User.query.count()
+			accnt = Account.query.count()
+			trcnt = Transaction.query.count()
+
+			res = {
+				'status': 'initialized',
+				'message': ' +++ DB INIT WAS SUCCESSFUL +++ ',
+				'data': {
+					'users': ucnt,
+					'accounts': accnt,
+					'transactions': trcnt
+				},
+				'credentials': {
+					'admin': 'admin / admin123',
+					'demo': 'demo / demo123'
+				}
+			}
+
+			logger.info(f" +++ DB INIT IS DONE -- users - {ucnt} | accs - {accnt}")
+			return res
+
+		else: # db alr got data
+			ucnt = User.query.count()
+			accnt = Account.query.count()
+			trcnt = Transaction.query.count()
+			lcnt = Loan.query.count()
+
+			res = {
+				'status': 'already_initialized',
+				'message': 'Database already has data',
+				'data': {
+					'users': ucnt,
+					'accounts': accnt,
+					'transactions': trcnt,
+					'loans': lcnt
+				}
+			}
+
+			logger.info(f" --- DB ALR INITED - users - {ucnt} | accounts - {accnt} --- ")
+			return res
+
+	except Exception as e:
+		logger.error(f" !!! ERR DURING DB INIT -- {e} !!! ")
+		db.session.rollback()
+		raise e

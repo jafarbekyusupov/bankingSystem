@@ -7,44 +7,26 @@ class AccountsComponent {
 
     initEventListeners() {
         // new account button
-        document.getElementById('accounts-new-account-btn').addEventListener('click',
-            this.showNewAccountModal.bind(this));
+        document.getElementById('accounts-new-account-btn').addEventListener('click',this.showNewAccountModal.bind(this));
 
         // new account form
-        document.getElementById('new-account-form').addEventListener('submit',
-            this.handleCreateAccount.bind(this));
+        document.getElementById('new-account-form').addEventListener('submit',this.handleCreateAccount.bind(this));
 
         // account actions
-        document.getElementById('deposit-btn').addEventListener('click',
-            this.showDepositModal.bind(this));
-        document.getElementById('withdraw-btn').addEventListener('click',
-            this.showWithdrawModal.bind(this));
-        document.getElementById('close-account-btn').addEventListener('click',
-            this.handleCloseAccount.bind(this));
+        document.getElementById('deposit-btn').addEventListener('click',this.showDepositModal.bind(this));
+        document.getElementById('withdraw-btn').addEventListener('click',this.showWithdrawModal.bind(this));
+        document.getElementById('close-account-btn').addEventListener('click',this.handleCloseAccount.bind(this));
 
         // transaction forms
-        document.getElementById('deposit-form').addEventListener('submit',
-            this.handleDeposit.bind(this));
-        document.getElementById('withdraw-form').addEventListener('submit',
-            this.handleWithdraw.bind(this));
+        document.getElementById('deposit-form').addEventListener('submit',this.handleDeposit.bind(this));
+        document.getElementById('withdraw-form').addEventListener('submit',this.handleWithdraw.bind(this));
 
         // modal close buttons
         document.querySelectorAll('#account-modal .close, #new-account-modal .close, #deposit-modal .close, #withdraw-modal .close')
-            .forEach(btn => {
-                btn.addEventListener('click', () => {
-                    this.closeAllModals();
-                });
-            });
+            .forEach(btn => { btn.addEventListener('click', () => { this.closeAllModals();});});
     }
 
-    /**
-     * set accounts data
-     * @param {array} accounts - user accounts
-     */
-    setAccounts(accounts) {
-        this.accounts = accounts || [];
-        this.updateAccountsUI();
-    }
+    setAccounts(accounts){ this.accounts = accounts || []; this.updateAccountsUI();}
 
     updateAccountsUI() {
         const accountsList = document.getElementById('accounts-list');
@@ -72,30 +54,24 @@ class AccountsComponent {
                     this.viewAccountDetails(account.account_id);
                 });
             });
-        } else {
-            accountsList.innerHTML = '<div class="empty-state">no accounts found</div>';
-        }
+        } else { accountsList.innerHTML = '<div class="empty-state">no accounts found</div>';}
     }
 
-    /**
-     * view account details
-     * @param {string} accountid - account id
-     */
     async viewAccountDetails(accountId) {
         try {
             // get account details
-            const account = await api.getAccount(accountId);
-            this.selectedAccount = account;
+            const acc = await api.getAccount(accountId);
+            this.selectedAccount = acc;
 
             // get account transactions
             const transactionsData = await api.getAccountTransactions(accountId);
             const transactions = transactionsData.transactions || [];
 
             // update modal ui
-            document.getElementById('modal-account-number').textContent = account.account_number;
-            document.getElementById('modal-account-type').textContent = account.account_type;
-            document.getElementById('modal-account-balance').textContent = this.formatCurrency(account.balance);
-            document.getElementById('modal-account-created').textContent = this.formatDate(account.created_at);
+            document.getElementById('modal-account-number').textContent = acc.account_number;
+            document.getElementById('modal-account-type').textContent = acc.account_type;
+            document.getElementById('modal-account-balance').textContent = this.formatCurrency(acc.balance);
+            document.getElementById('modal-account-created').textContent = this.formatDate(acc.created_at);
 
             // show transactions
             const transactionsContainer = document.getElementById('modal-account-transactions');
@@ -106,20 +82,15 @@ class AccountsComponent {
                 transactions.forEach(transaction => {
                     transactionsContainer.appendChild(this.createTransactionElement(transaction));
                 });
-            } else {
-                transactionsContainer.innerHTML = '<div class="empty-state">no transactions found</div>';
-            }
+            } else { transactionsContainer.innerHTML = '<div class="empty-state">no transactions found</div>';}
 
             // show modal
             document.getElementById('account-modal').style.display = 'block';
 
             // hide close account button if balance is not zero
             const closeAccountBtn = document.getElementById('close-account-btn');
-            closeAccountBtn.style.display = account.balance === 0 ? 'inline-block' : 'none';
-        } catch (error) {
-            console.error('error viewing account details:', error);
-            alert('failed to load account details');
-        }
+            closeAccountBtn.style.display = acc.balance === 0 ? 'inline-block' : 'none';
+        } catch(error){ console.error('error viewing account details:', error); alert('failed to load account details');}
     }
 
     showNewAccountModal() {
@@ -160,29 +131,20 @@ class AccountsComponent {
         document.getElementById('withdraw-modal').style.display = 'block';
     }
 
-    /**
-     * handle create account form submission
-     * @param {event} e - form submit event
-     */
     async handleCreateAccount(e) {
         e.preventDefault();
 
-        const accountData = {
+        const accData = {
             account_type: document.getElementById('account-type').value,
             balance: parseFloat(document.getElementById('initial-deposit').value) || 0
         };
 
         try {
-            await api.createAccount(accountData);
-
-            // close modal
+            await api.createAccount(accData);
             this.closeAllModals();
 
-            // reload accounts
-            const accountsData = await api.getAccounts();
-            this.setAccounts(accountsData.accounts);
-
-            // show success message
+            const accsData = await api.getAccounts();
+            this.setAccounts(accsData.accounts);
             alert('account created successfully');
         } catch (error) {
             const errorElem = document.getElementById('new-account-error');
@@ -191,29 +153,25 @@ class AccountsComponent {
         }
     }
 
-    /**
-     * handle deposit form submission
-     * @param {event} e - form submit event
-     */
     async handleDeposit(e) {
         e.preventDefault();
 
-        const accountId = document.getElementById('deposit-account-id').value;
+        const accId = document.getElementById('deposit-account-id').value;
         const amount = parseFloat(document.getElementById('deposit-amount').value);
-        const description = document.getElementById('deposit-description').value;
+        const descr = document.getElementById('deposit-description').value;
 
         try {
-            await api.deposit(accountId, amount, description);
+            await api.deposit(accId, amount, descr);
 
             // close modal
             this.closeAllModals();
 
             // refresh acc details
-            await this.viewAccountDetails(accountId);
+            await this.viewAccountDetails(accId);
 
             // reload accs
-            const accountsData = await api.getAccounts();
-            this.setAccounts(accountsData.accounts);
+            const accsData = await api.getAccounts();
+            this.setAccounts(accsData.accounts);
         } catch (error) {
             const errorElem = document.getElementById('deposit-error');
             errorElem.textContent = error.message || 'failed to process deposit';
@@ -221,29 +179,17 @@ class AccountsComponent {
         }
     }
 
-    /**
-     * handle withdraw form submission
-     * @param {event} e - form submit event
-     */
     async handleWithdraw(e) {
         e.preventDefault();
-
-        const accountId = document.getElementById('withdraw-account-id').value;
+        const accId = document.getElementById('withdraw-account-id').value;
         const amount = parseFloat(document.getElementById('withdraw-amount').value);
-        const description = document.getElementById('withdraw-description').value;
-
+        const descr = document.getElementById('withdraw-description').value;
         try {
-            await api.withdraw(accountId, amount, description);
-
-            // close modal
+            await api.withdraw(accId, amount, descr);
             this.closeAllModals();
-
-            // refresh acc details
-            await this.viewAccountDetails(accountId);
-
-            // reload accs
-            const accountsData = await api.getAccounts();
-            this.setAccounts(accountsData.accounts);
+            await this.viewAccountDetails(accId);
+            const accsData = await api.getAccounts();
+            this.setAccounts(accsData.accounts);
         } catch (error) {
             const errorElem = document.getElementById('withdraw-error');
             errorElem.textContent = error.message || 'failed to process withdrawal';
@@ -253,11 +199,7 @@ class AccountsComponent {
 
     async handleCloseAccount() {
         if (!this.selectedAccount) return;
-
-        if (!confirm('are you sure you want to close this account? this action cannot be undone.')) {
-            return;
-        }
-
+        if(!confirm('are you sure you want to close this account? this action cannot be undone.')){ return;}
         try {
             await api.closeAccount(this.selectedAccount.account_id);
 
@@ -265,51 +207,30 @@ class AccountsComponent {
             this.closeAllModals();
 
             // reload accs
-            const accountsData = await api.getAccounts();
-            this.setAccounts(accountsData.accounts);
+            const accData = await api.getAccounts();
+            this.setAccounts(accData.accounts);
 
             alert('account closed successfully');
-        } catch (error) {
-            alert(error.message || 'failed to close account');
-        }
+        } catch (error){ alert(error.message || 'failed to close account');}
     }
 
-    /**
-     * create transaction element
-     * @param {object} transaction - transaction data
-     * @returns {htmlelement} - transaction element
-     */
     createTransactionElement(transaction) {
-        const transactionEl = document.createElement('div');
-        transactionEl.className = 'transaction-item';
+        const trnscEl = document.createElement('div');
+        trnscEl.className = 'transaction-item';
 
-        // format transaction amount and determine css class
-        let amountClass = '';
-        let amountPrefix = '';
+        let mntClass = '';
+        let mntPref = '';
 
         switch (transaction.transaction_type) {
-            case 'deposit':
-                amountClass = 'deposit';
-                amountPrefix = '+';
-                break;
-            case 'withdrawal':
-                amountClass = 'withdrawal';
-                amountPrefix = '-';
-                break;
+            case 'deposit': mntClass = 'deposit'; mntPref = '+'; break;
+            case 'withdrawal': mntClass = 'withdrawal'; mntPref = '-'; break;
             case 'transfer':
-                if (transaction.destination_account_id) {
-                    // outgoing transfer
-                    amountClass = 'withdrawal';
-                    amountPrefix = '-';
-                } else {
-                    // incoming transfer
-                    amountClass = 'deposit';
-                    amountPrefix = '+';
-                }
+                if(transaction.destination_account_id){ mntClass = 'withdrawal'; mntPref = '-';} // outgoing transfer
+                else{ mntClass = 'deposit'; mntPref = '+';} // incoming transfer
                 break;
         }
 
-        transactionEl.innerHTML = `
+        trnscEl.innerHTML = `
             <div class="transaction-info">
                 <div class="transaction-date">${this.formatDate(transaction.created_at)}</div>
                 <div class="transaction-desc">${transaction.description || transaction.transaction_type}</div>
@@ -319,32 +240,13 @@ class AccountsComponent {
             </div>
         `;
 
-        return transactionEl;
+        return trnscEl;
     }
 
-    closeAllModals() {
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.style.display = 'none';
-        });
-    }
+    closeAllModals(){ document.querySelectorAll('.modal').forEach(modal => { modal.style.display = 'none';});}
 
-    /**
-     * format currency amount
-     * @param {number} amount - amount to format
-     * @returns {string} - formatted currency string
-     */
-    formatCurrency(amount) {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount);
-    }
+    formatCurrency(amount) { return new Intl.NumberFormat('en-US', { style:'currency',currency: 'USD'}).format(amount);}
 
-    /**
-     * format date
-     * @param {string} datestring - iso date string
-     * @returns {string} - formatted date string
-     */
     formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {

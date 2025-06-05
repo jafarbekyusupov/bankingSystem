@@ -6,42 +6,19 @@ class AdminComponent {
         this.initEventListeners();
     }
 
-    initEventListeners() {
-        // We'll add event listeners dynamically when loading admin sections
-    }
+    initEventListeners(){}
 
-    /**
-     * check if user is admin
-     * @param {Object} user - user data
-     * @returns {boolean} - true if user is admin
-     */
-    isAdmin(user) {
-        return user && user.role === 'admin';
-    }
+    isAdmin(user){ return user && user.role === 'admin';}
 
-     /**
-     * init admin dashboard
-     * @param {Object} user - Current user data
-     */
-    async initAdminDashboard(user) {
-        if (!this.isAdmin(user)) return;
-
-        // add admin tab to navigation if not alr added
+    async initAdminDashboard(user){
+        if(!this.isAdmin(user)){ return;}
         this.addAdminNavItem();
-
-        // create admin page if dne
         await this.createAdminPage();
     }
 
-    /**
-     * add admin nav item
-     */
     addAdminNavItem() {
         const navList = document.querySelector('.nav-list');
-
-         if (document.querySelector('.nav-link[data-page="admin"]')) {
-            return;
-        }
+        if(document.querySelector('.nav-link[data-page="admin"]')){ return;}
 
         // create admin nav item
         const adminNavItem = document.createElement('li');
@@ -59,17 +36,12 @@ class AdminComponent {
     }
 
     async createAdminPage() {
-        if (document.getElementById('admin-page')) {
-            return;
-        }
-
+        if(document.getElementById('admin-page')){ return;}
         const adminPage = document.createElement('div');
         adminPage.id = 'admin-page';
         adminPage.className = 'page';
-
         adminPage.innerHTML = `
             <h2>Admin Dashboard</h2>
-            
             <div class="admin-tabs">
                 <div class="tab-links">
                     <a href="#" class="tab-link active" data-tab="users">User Management</a>
@@ -138,38 +110,24 @@ class AdminComponent {
             </div>
         `;
 
-        // add admin page to main pages
         document.getElementById('main-pages').appendChild(adminPage);
-
-        // css for admin page
         this.addAdminStyles();
 
         adminPage.querySelectorAll('.tab-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const tabId = e.target.getAttribute('data-tab');
-                this.showTab(tabId);
-            });
+            link.addEventListener('click', (e) => { e.preventDefault(); const tabId = e.target.getAttribute('data-tab');this.showTab(tabId);});
         });
 
-        // add event listeners for modals
         adminPage.querySelectorAll('.modal .close').forEach(btn => {
             btn.addEventListener('click', () => {
-                adminPage.querySelectorAll('.modal').forEach(modal => {
-                    modal.style.display = 'none';
-                });
+                adminPage.querySelectorAll('.modal').forEach(modal => { modal.style.display = 'none';});
             });
         });
 
         await this.loadAdminData();
     }
 
-    /** admin specific css styles */
     addAdminStyles() {
-        if (document.getElementById('admin-styles')) {
-            return;
-        }
-
+        if(document.getElementById('admin-styles')){ return;}
         const style = document.createElement('style');
         style.id = 'admin-styles';
         style.textContent = `
@@ -259,47 +217,26 @@ class AdminComponent {
                 border-bottom: 1px solid var(--gray-light);
             }
         `;
-
         document.head.appendChild(style);
     }
 
-    /** loading all admin data */
-    async loadAdminData() {
-        try {
-            // load users
+    async loadAdminData(){
+        try{
             await this.loadUsers();
-
-            // load pending loans
             await this.loadPendingLoans();
-
-            // load system stats
             await this.loadSystemStats();
-        } catch (error) {
-            console.error('Error loading admin data:', error);
-        }
+        } catch(error){ console.error('Error loading admin data:', error);}
     }
 
-    async loadUsers() {
-        try {
-            // get all users
-            const response = await fetch('/api/v1/users', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+    async loadUsers(){
+        try{
+            const getAllUsers = await fetch('/api/v1/users', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
+            if(!getAllUsers.ok){ throw new Error('Failed to load users');}
 
-            if (!response.ok) {
-                throw new Error('Failed to load users');
-            }
-
-            const data = await response.json();
+            const data = await getAllUsers.json();
             this.users = data.users || [];
-
-            // upd users list
             this.updateUsersList();
-        } catch (error) {
-            console.error('Error loading users:', error);
-        }
+        } catch(error){ console.error('Error loading users:', error);}
     }
 
     updateUsersList() {
@@ -332,41 +269,21 @@ class AdminComponent {
                     this.viewUserDetails(userId);
                 });
             });
-        } else {
-            usersList.innerHTML = '<div class="empty-state">No users found</div>';
-        }
+        } else{ usersList.innerHTML = '<div class="empty-state">No users found</div>';}
     }
 
-    /**
-     * view user details
-     * @param {string} userId - User ID
-     */
-    async viewUserDetails(userId) {
-        try {
-            const response = await fetch(`/api/v1/users/${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to load user details');
-            }
+    async viewUserDetails(userId){
+        try{
+            const response = await fetch(`/api/v1/users/${userId}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
+            if(!response.ok){ throw new Error('Failed to load user details');}
 
             const user = await response.json();
 
             // get user accs
-            const accountsResponse = await fetch(`/api/v1/accounts?user_id=${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            const accountsResponse = await fetch(`/api/v1/accounts?user_id=${userId}`, { headers:{ 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
 
             let accounts = [];
-            if (accountsResponse.ok) {
-                const accountsData = await accountsResponse.json();
-                accounts = accountsData.accounts || [];
-            }
+            if(accountsResponse.ok){ const accountsData = await accountsResponse.json(); accounts = accountsData.accounts || [];}
 
             // upd user details ui
             const userDetails = document.getElementById('user-details');
@@ -426,87 +343,49 @@ class AdminComponent {
             }
 
             const editBtn = userDetails.querySelector('.edit-user-btn');
-            if (editBtn) {
-                editBtn.addEventListener('click', () => {
-                    alert('Edit user functionality would be implemented here');
-                });
-            }
+            if(editBtn){ editBtn.addEventListener('click', () => { alert('Edit user functionality would be implemented here');});}
 
             const deleteBtn = userDetails.querySelector('.delete-user-btn');
-            if (deleteBtn) {
-                deleteBtn.addEventListener('click', () => {
-                    if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-                        this.deleteUser(userId);
-                    }
-                });
+            if(deleteBtn){ deleteBtn.addEventListener('click', () => {
+                if(confirm('Are you sure you want to delete this user? This action cannot be undone.')){ this.deleteUser(userId);}});
             }
-
             document.getElementById('user-details-modal').style.display = 'block';
-        } catch (error) {
-            console.error('Error viewing user details:', error);
-            alert('Failed to load user details');
-        }
+        } catch(error){ console.error('Error viewing user details:', error); alert('Failed to load user details');}
     }
 
-    /**
-     * delete a user
-     * @param {string} userId - user id
-     */
     async deleteUser(userId) {
         try {
             const response = await fetch(`/api/v1/users/${userId}`, {
                 method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to delete user');
-            }
-
-
+            if(!response.ok){ throw new Error('Failed to delete user');}
             document.getElementById('user-details-modal').style.display = 'none';
-
             await this.loadUsers();
-
             alert('User deleted successfully');
-        } catch (error) {
-            console.error('Error deleting user:', error);
-            alert(error.message || 'Failed to delete user');
-        }
+        } catch(error){ console.error('Error deleting user:', error); alert(error.message || 'Failed to delete user');}
     }
 
     async loadPendingLoans() {
         try {
-            const response = await fetch('/api/v1/loans?all=true', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            const getLoans = await fetch('/api/v1/loans?all=true', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
+            if(!getLoans.ok){ throw new Error('Failed to load loans');}
 
-            if (!response.ok) {
-                throw new Error('Failed to load loans');
-            }
-
-            const data = await response.json();
+            const data = await getLoans.json();
             const loans = data.loans || [];
 
             this.pendingLoans = loans.filter(loan => loan.status === 'pending');
             this.approvedLoans = loans.filter(loan => loan.status === 'approved');
-
             this.updateLoansUI();
-        } catch (error) {
-            console.error('Error loading loans:', error);
-        }
+        } catch(error){ console.error('Error loading loans:', error);}
     }
 
     updateLoansUI() {
         const pendingLoansList = document.getElementById('pending-loans');
 
-        if (this.pendingLoans.length > 0) {
+        if(this.pendingLoans.length>0){
             pendingLoansList.innerHTML = '';
-
             this.pendingLoans.forEach(loan => {
                 const loanItem = document.createElement('div');
                 loanItem.className = 'admin-loan-item';
@@ -525,7 +404,6 @@ class AdminComponent {
                         <button class="btn btn-primary view-loan-btn" data-id="${loan.loan_id}">View Details</button>
                     </div>
                 `;
-
                 pendingLoansList.appendChild(loanItem);
             });
 
@@ -535,13 +413,11 @@ class AdminComponent {
                     this.viewLoanDetails(loanId);
                 });
             });
-        } else {
-            pendingLoansList.innerHTML = '<div class="empty-state">No pending loan applications</div>';
-        }
+        } else{ pendingLoansList.innerHTML = '<div class="empty-state">No pending loan applications</div>';}
 
         const approvedLoansList = document.getElementById('approved-loans');
 
-        if (this.approvedLoans.length > 0) {
+        if(this.approvedLoans.length > 0){
             approvedLoansList.innerHTML = '';
 
             this.approvedLoans.forEach(loan => {
@@ -571,47 +447,26 @@ class AdminComponent {
                     this.viewLoanDetails(loanId);
                 });
             });
-        } else {
-            approvedLoansList.innerHTML = '<div class="empty-state">No approved loans pending activation</div>';
-        }
+        } else{ approvedLoansList.innerHTML = '<div class="empty-state">No approved loans pending activation</div>';}
     }
 
-    /**
-     * view loan details
-     * @param {string} loanId - loan id
-     */
-    async viewLoanDetails(loanId) {
+    async viewLoanDetails(loanId){
         try {
-            // Get loan details
-            const response = await fetch(`/api/v1/loans/${loanId}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to load loan details');
-            }
-
-            const loan = await response.json();
+            const loanDtls = await fetch(`/api/v1/loans/${loanId}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
+            if(!loanDtls.ok){ throw new Error('Failed to load loan details');}
+            const loan = await loanDtls.json();
 
             const user = this.users.find(u => u.user_id === loan.user_id) || { full_name: 'Unknown User', email: 'Unknown' };
 
             let monthlyPayment = 'Not calculated';
-            try {
-                const paymentResponse = await fetch(`/api/v1/loans/${loanId}/payment-amount`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+            try{
+                const paymentResponse = await fetch(`/api/v1/loans/${loanId}/payment-amount`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
 
-                if (paymentResponse.ok) {
+                if(paymentResponse.ok){
                     const paymentData = await paymentResponse.json();
                     monthlyPayment = this.formatCurrency(paymentData.payment_amount);
                 }
-            } catch (error) {
-                console.error('Error calculating payment:', error);
-            }
+            } catch(error){ console.error('Error calculating payment:', error);}
 
             const loanDetails = document.getElementById('admin-loan-details');
             loanDetails.innerHTML = `
@@ -664,20 +519,16 @@ class AdminComponent {
             const actionsContainer = document.getElementById('admin-loan-actions');
             actionsContainer.innerHTML = '';
 
-            if (loan.status === 'pending') {
+            if(loan.status === 'pending'){
                 const approveBtn = document.createElement('button');
                 approveBtn.className = 'btn btn-success';
                 approveBtn.innerHTML = '<i class="fas fa-check"></i> Approve Loan';
-                approveBtn.addEventListener('click', () => {
-                    this.approveLoan(loanId);
-                });
+                approveBtn.addEventListener('click', () => { this.approveLoan(loanId);});
 
                 const rejectBtn = document.createElement('button');
                 rejectBtn.className = 'btn btn-danger';
                 rejectBtn.innerHTML = '<i class="fas fa-times"></i> Reject Loan';
-                rejectBtn.addEventListener('click', () => {
-                    this.rejectLoan(loanId);
-                });
+                rejectBtn.addEventListener('click', () => { this.rejectLoan(loanId);});
 
                 actionsContainer.appendChild(approveBtn);
                 actionsContainer.appendChild(rejectBtn);
@@ -685,206 +536,99 @@ class AdminComponent {
                 const activateBtn = document.createElement('button');
                 activateBtn.className = 'btn btn-success';
                 activateBtn.innerHTML = '<i class="fas fa-play"></i> Activate Loan';
-                activateBtn.addEventListener('click', () => {
-                    this.activateLoan(loanId);
-                });
+                activateBtn.addEventListener('click', () => { this.activateLoan(loanId);});
 
                 actionsContainer.appendChild(activateBtn);
             }
 
             document.getElementById('admin-loan-modal').style.display = 'block';
-        } catch (error) {
-            console.error('Error viewing loan details:', error);
-            alert('Failed to load loan details');
-        }
+        } catch(error){ console.error('Error viewing loan details:', error); alert('Failed to load loan details');}
     }
 
-    /**
-     * approve loan
-     * @param {string} loanId - loan id
-     */
     async approveLoan(loanId) {
         try {
-            const response = await fetch(`/api/v1/loans/${loanId}/approve`, {
+            const apprvLoan = await fetch(`/api/v1/loans/${loanId}/approve`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to approve loan');
-            }
-
+            if(!apprvLoan.ok){ throw new Error('Failed to approve loan');}
             document.getElementById('admin-loan-modal').style.display = 'none';
-
             await this.loadPendingLoans();
-
             alert('Loan approved successfully');
-        } catch (error) {
-            console.error('Error approving loan:', error);
-            alert(error.message || 'Failed to approve loan');
-        }
+        } catch(error){ console.error('Error approving loan:', error); alert(error.message || 'Failed to approve loan');}
     }
 
-    /**
-     * reject loan
-     * @param {string} loanId - loan id
-     */
     async rejectLoan(loanId) {
         try {
-            const response = await fetch(`/api/v1/loans/${loanId}/reject`, {
+            const rjctLoan = await fetch(`/api/v1/loans/${loanId}/reject`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to reject loan');
-            }
-
+            if(!rjctLoan.ok){ throw new Error('Failed to reject loan');}
             document.getElementById('admin-loan-modal').style.display = 'none';
-
             await this.loadPendingLoans();
-
             alert('Loan rejected successfully');
-        } catch (error) {
-            console.error('Error rejecting loan:', error);
-            alert(error.message || 'Failed to reject loan');
-        }
+        } catch(error){ console.error('Error rejecting loan:', error); alert(error.message || 'Failed to reject loan');}
     }
 
-    /**
-     * activate loan
-     * @param {string} loanId - loan id
-     */
     async activateLoan(loanId) {
         try {
-            const response = await fetch(`/api/v1/loans/${loanId}/activate`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            const activateLoan = await fetch(`/api/v1/loans/${loanId}/activate`, {
+                method: 'POST', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
 
-            if (!response.ok) {
-                throw new Error('Failed to activate loan');
-            }
-
+            if(!activateLoan.ok){ throw new Error('Failed to activate loan');}
             document.getElementById('admin-loan-modal').style.display = 'none';
-
             await this.loadPendingLoans();
-
             alert('Loan activated successfully');
-        } catch (error) {
-            console.error('Error activating loan:', error);
-            alert(error.message || 'Failed to activate loan');
-        }
+        } catch(error){ console.error('Error activating loan:', error); alert(error.message || 'Failed to activate loan');}
     }
 
     async loadSystemStats() {
         try {
             document.getElementById('stats-users').textContent = this.users.length;
+            const accsRsp = await fetch('/api/v1/accounts?all=true', {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
 
-            const accountsResponse = await fetch('/api/v1/accounts?all=true', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            let accCnt = 0;
+            if(accsRsp.ok){ const accountsData = await accsRsp.json(); accCnt = (accountsData.accounts || []).length;}
 
-            let accountsCount = 0;
-            if (accountsResponse.ok) {
-                const accountsData = await accountsResponse.json();
-                accountsCount = (accountsData.accounts || []).length;
-            }
+            document.getElementById('stats-accounts').textContent = accCnt;
 
-            document.getElementById('stats-accounts').textContent = accountsCount;
+            const transacRsp = await fetch('/api/v1/accounts/user/transactions', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
 
-            const transactionsResponse = await fetch('/api/v1/accounts/user/transactions', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            let transacCnt = 0;
+            if (transacRsp.ok){ const transactionsData = await transacRsp.json(); transacCnt = (transactionsData.transactions || []).length;}
 
-            let transactionsCount = 0;
-            if (transactionsResponse.ok) {
-                const transactionsData = await transactionsResponse.json();
-                transactionsCount = (transactionsData.transactions || []).length;
-            }
+            document.getElementById('stats-transactions').textContent = transacCnt;
 
-            document.getElementById('stats-transactions').textContent = transactionsCount;
+            const loanRsp = await fetch('/api/v1/loans?all=true', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}});
 
-            const loansResponse = await fetch('/api/v1/loans?all=true', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            let loansCount = 0;
-            if (loansResponse.ok) {
-                const loansData = await loansResponse.json();
-                loansCount = (loansData.loans || []).length;
-            }
-
-            document.getElementById('stats-loans').textContent = loansCount;
-        } catch (error) {
-            console.error('Error loading system stats:', error);
-        }
+            let loanCnt = 0;
+            if(loanRsp.ok){ const loansData = await loanRsp.json(); loanCnt = (loansData.loans || []).length;}
+            document.getElementById('stats-loans').textContent = loanCnt;
+        } catch(error){ console.error('Error loading system stats:', error);}
     }
 
-    showAdminDashboard() {
-        document.querySelectorAll('#main-pages .page').forEach(p => {
-            p.classList.remove('active');
-        });
-
+    showAdminDashboard(){
+        document.querySelectorAll('#main-pages .page').forEach(p => { p.classList.remove('active');});
         document.getElementById('admin-page').classList.add('active');
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-
+        document.querySelectorAll('.nav-link').forEach(link => { link.classList.remove('active');});
         document.querySelector('.nav-link[data-page="admin"]').classList.add('active');
-
         this.loadAdminData();
     }
 
-    /**
-     * show specific tab
-     * @param {string} tabId - tab id
-     */
     showTab(tabId) {
-        document.querySelectorAll('.tab-pane').forEach(pane => {
-            pane.classList.remove('active');
-        });
-
+        document.querySelectorAll('.tab-pane').forEach(pane => { pane.classList.remove('active');});
         document.getElementById(`${tabId}-tab`).classList.add('active');
-
-        document.querySelectorAll('.tab-link').forEach(link => {
-            link.classList.remove('active');
-        });
-
+        document.querySelectorAll('.tab-link').forEach(link => { link.classList.remove('active');});
         document.querySelector(`.tab-link[data-tab="${tabId}"]`).classList.add('active');
     }
 
-    /**
-     * format currency amount
-     * @param {number} amount - amount to format
-     * @returns {string} - formatted currency str
-     */
-    formatCurrency(amount) {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount);
-    }
+    formatCurrency(amount){ return new Intl.NumberFormat('en-US', { style: 'currency',currency: 'USD'}).format(amount);}
 
-    /**
-     * format date
-     * @param {string} dateString - iso date str
-     * @returns {string} - formatted date str
-     */
-    formatDate(dateString) {
+    formatDate(dateString){
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
             year: 'numeric',
@@ -895,16 +639,7 @@ class AdminComponent {
         });
     }
 
-    /**
-     * format loan status
-     * @param {string} status - loan status
-     * @returns {string} - formatted status str
-     */
-    formatLoanStatus(status) {
-        return status.replace('_', ' ').split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-    }
+    formatLoanStatus(status){ return status.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');}
 }
 
 const adminComponent = new AdminComponent();

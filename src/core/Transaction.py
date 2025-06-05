@@ -3,10 +3,6 @@ from datetime import datetime
 
 
 class Transaction:
-    """
-    transaction class representing financial transactions
-    """
-
     TRANSACTION_TYPES = ['deposit', 'withdrawal', 'transfer']
 
     def __init__(self, account_id, transaction_type, amount, description=None,
