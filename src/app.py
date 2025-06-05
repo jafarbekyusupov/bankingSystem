@@ -118,7 +118,7 @@ def auto_initialize_database():
 			db.session.add(savings_account)
 			db.session.commit()
 
-			logger.info("🏦 Sample accounts created")
+			logger.info(" === sample accs created === ")
 
 			checking_transaction = Transaction(
 				account_id=checking_account.account_id,
@@ -137,7 +137,7 @@ def auto_initialize_database():
 			db.session.add(savings_transaction)
 			db.session.commit()
 
-			logger.info("💳 Sample transactions created")
+			logger.info(" === sample transacs created === ")
 
 			ucnt = User.query.count()
 			accnt = Account.query.count()
