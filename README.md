@@ -11,7 +11,11 @@
 </div>
 
 ## [🌐 Live Demo](https://bankingsystem-0ybm.onrender.com/)
-[→ Live Demo: Banking System App](https://bankingsystem-0ybm.onrender.com/)
+[![Try It Now](https://img.shields.io/badge/TRY_IT_HERE-FF6B6B?style=for-the-badge&logo=firefox&logoColor=white)](https://bankingsystem-0ybm.onrender.com/)
+> [!IMPORTANT]  
+> 🔸 **Cold Start Delay**: This demo runs on a free-tier cloud service. If the link hasn't been clicked recently, the server may enter *sleep mode*.  
+> 🔸 **First load** could take from **10-50 seconds**. After first load, following one will be fast
+
 ## 🎬 Demo Video
 
 [![Banking System Demo](https://img.youtube.com/vi/czdNo4DnRyc/0.jpg)](https://www.youtube.com/watch?v=czdNo4DnRyc)
