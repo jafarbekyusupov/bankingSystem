@@ -16,7 +16,7 @@
 > 🔸 **Cold Start Delay**: This demo runs on a free-tier cloud service. If the link hasn't been clicked recently, the server may enter *sleep mode*.  
 > 🔸 **First load** could take from **10-50 seconds**. After first load, following ones will be fast
 
-## 🎬 Demo Video
+## [🎬 Demo Video](https://www.youtube.com/watch?v=czdNo4DnRyc)
 
 [![Banking System Demo](https://img.youtube.com/vi/czdNo4DnRyc/0.jpg)](https://www.youtube.com/watch?v=czdNo4DnRyc)
 
@@ -25,14 +25,14 @@
 ## 🔧 Usage
 
 ### 👨🏻‍💻 Default Admin Account
- - Username: admin
- - Password: admin123
+ - Username: `admin`
+ - Password: `admin123`
 
 ### 👤 Sample User Account
-- Username: user
-- Password: user123
+- Username: `user`
+- Password: `user123`
 > [!TIP]
-> You can also create your own User Account via Registration Form
+> You can also create your own **`User Account`** via **Registration Form**
 
 ## 📋 Features
 
