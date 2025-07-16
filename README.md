@@ -93,6 +93,10 @@ For detailed API documentation, see the API section in the application.
 
 ## 🏗️ Project Structure
 
+> [!NOTE]
+> #### [Detailed Project Overview & Analysis](https://deepwiki.com/jafarbekyusupov/bankingSystem)
+> Explore the complete project overview, including UML Diagrams and in-depth explanations, provided by **Cognition** [here.](https://deepwiki.com/jafarbekyusupov/bankingSystem)
+
 The project follows a modular architecture with clear separation of concerns:
 
 - `core/`: Core domain models
