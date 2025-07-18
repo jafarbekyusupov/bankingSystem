@@ -60,17 +60,29 @@ git clone https://github.com/jafarbekyusupov/bankingSystem.git
 cd bankingSystem
 ```
 
-2. 📦 Install dependencies:
+2. **Create virtual environment**
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+> [!TIP]
+> On Windows:
+> ```
+> python -m venv venv
+> venv\Scripts\activate
+> ```
+
+3. 📦 Install dependencies:
 ```
 pip install -r requirements.txt
 ```
 
-3. 🕹️ Run the application:
+4. 🕹️ Run the application:
 ```
 python run.py
 ```
 
-4. 🌐 Access the web application:
+5. 🌐 Access the web application:
 Open your browser and navigate to `http://localhost:5000`
 
 ## 📚 API Documentation
@@ -175,3 +187,13 @@ BankingSystem/
 │   │   ├── test_account_routes.py
 └─  └─  └── test_loan_routes.py
 ```
+
+---
+
+<div align="center">
+
+#### [BankingSystem](https://github.com/jafarbekyusupov/bankingSystem) @ [`jafarbekyusupov`](https://github.com/jafarbekyusupov)
+
+[⭐ Star this **Repo**](https://github.com/jafarbekyusupov/bankingSystem) • [🐛 Report **Bug**](https://github.com/jafarbekyusupov/bankingSystem/issues) • [💡 Request **Feature**](https://github.com/jafarbekyusupov/bankingSystem/issues)
+
+</div>
