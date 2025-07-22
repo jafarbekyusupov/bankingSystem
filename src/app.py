@@ -7,6 +7,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from src.models import db, User, Account, Loan, Transaction
+from src.utils.keepalive import setup_keepalive
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -80,6 +81,10 @@ def create_app():
 			return jsonify(res), 200
 		except Exception as e:
 			return jsonify({'error': str(e), 'retry': 'try again in 30 seconds'}), 500
+
+	# keep alive to prevent server from going to sleep (ihu render _-_)
+	if not app.config.get('TESTING'):
+		setup_keepalive(app)
 
 	return app
 
