@@ -1,26 +1,23 @@
-# [🏦 Banking System](https://bankingsystem-0ybm.onrender.com/)
-### Full-stack Single Page Banking Application
+# [🏦 Banking System](https://bankingsystem.jafarbekyusupov.com/)
+### Full-Stack Single Page Banking Application
 
 <div>
   <img src="https://img.shields.io/badge/Flask-2.3.x-white?logo=flask&logoColor=white&labelColor=000000&style=for-the-badge" alt="Flask">
   <img src="https://img.shields.io/badge/Python-3.8+-white?logo=python&logoColor=white&labelColor=3776AB&style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/HTML5-white?logo=html5&logoColor=white&labelColor=E34F26&style=for-the-badge" alt="HTML5">
-  <img src="https://img.shields.io/badge/CSS3-white?logo=css3&logoColor=white&labelColor=1572B6&style=for-the-badge" alt="CSS3">
+  <img src="https://img.shields.io/badge/CSS3-white?style=for-the-badge&logo=css3&logoColor=white&labelColor=1572B6" alt="CSS3">
   <img src="https://img.shields.io/badge/JavaScript-white?logo=javascript&logoColor=black&labelColor=F7DF1E&style=for-the-badge" alt="JavaScript">
   <img src="https://img.shields.io/badge/PostgreSQL-white?logo=postgresql&logoColor=white&labelColor=4169E1&style=for-the-badge" alt="PostgreSQL">
+  <!-- <a href="https://m.do.co/c/b75e7d1f645d">
+    <img src="https://img.shields.io/badge/DigitalOcean-white?style=for-the-badge&logo=digitalocean&logoColor=white&labelColor=0080FF" alt="DigitalOcean">
+  </a> -->
+  
+  <a href="https://www.digitalocean.com/?refcode=b75e7d1f645d&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" /></a>
 </div>
-
-## [🌐 Live Demo](https://bankingsystem-0ybm.onrender.com/)
-[![Try It Now](https://img.shields.io/badge/TRY_IT_HERE-FF6B6B?style=for-the-badge&logo=firefox&logoColor=white)](https://bankingsystem-0ybm.onrender.com/)
-> [!IMPORTANT]  
-> 🔸 **Cold Start Delay**: This demo runs on a free-tier cloud service. If the link hasn't been clicked recently, the server may enter *sleep mode*.  
-> 🔸 **First load** could take from **10-50 seconds**. After first load, following ones will be fast
 
 ## [🎬 Demo Video](https://www.youtube.com/watch?v=czdNo4DnRyc)
 
 [![Banking System Demo](https://img.youtube.com/vi/czdNo4DnRyc/0.jpg)](https://www.youtube.com/watch?v=czdNo4DnRyc)
-
-**Watch Demo:** [Mini Banking System Web App Video Demo | Full-Stack Python Flask & JS](https://www.youtube.com/watch?v=czdNo4DnRyc)
 
 ## 🔧 Usage
 
@@ -65,7 +62,7 @@ cd bankingSystem
 python -m venv venv
 source venv/bin/activate
 ```
-> [!TIP]
+> [!NOTE]
 > On Windows:
 > ```
 > python -m venv venv
